@@ -6,9 +6,10 @@ function getData(){
   }; 
   $.ajax({
     type: "GET",
-    url: "graphs",
+    url: "http://imaginexyz-genuinoday.herokuapp.com/imaginexyz/graphs",
     beforeSend: setHeader,
     success: function(res){
+      console.log(res);
       drawChart(res);//Invoca la función que dibuja el gráfico
       getData2();//Función para obtener más datos del servidor
     }
@@ -23,9 +24,10 @@ function getData2(){
   }; 
   $.ajax({
     type: "GET",
-    url: "posts",
+    url: "http://imaginexyz-genuinoday.herokuapp.com/imaginexyz/posts",
     beforeSend: setHeader,
     success: function(res){
+      console.log(res);
       drawChart2(res);
     }
   });
