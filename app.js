@@ -8,7 +8,8 @@
 var express = require('express'), //Biblioteca para permitir servicios REST
     cookieParser = require('cookie-parser'), 
     bodyParser = require('body-parser'), //Biblioteca para manejar los datos de las solicitudes
-    mqtt = require('mqtt'), url = require('url'); //Biblioteca para manejar los solicitudes MQTT
+    mqtt = require('mqtt'), url = require('url'),//Biblioteca para manejar los solicitudes MQTT
+    cors = require('cors'); //Boblioteca para permitir llamadas CORS
 
 //REST APIS
 var  database = require('./services/database'); //Archivo donde vamos a comunicarnos con la base de datos
@@ -16,6 +17,7 @@ var  database = require('./services/database'); //Archivo donde vamos a comunica
 var app = express(); //Instancia de express
 app.use(express.logger('dev')); //Método de ver los mensajes en consola
 app.use(bodyParser());
+app.use(cors()); //Permite CORS en todas las rutas
 
 app.use(express.static(__dirname + '/webpage')); //Página por defecto al ingresar al servidor
 app.use('/imaginexyz', express.static(__dirname + '/graphs')); //Página para vizualizar los datos ingresados

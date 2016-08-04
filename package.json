@@ -14,6 +14,7 @@
     "body-parser": "*",
     "mongodb": "*",
     "url": "*",
-    "mqtt": "*"
+    "mqtt": "*",
+    "cors": "*"
   }
 }
