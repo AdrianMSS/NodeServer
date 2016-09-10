@@ -57,6 +57,7 @@ exports.getData = function(req,res) {
 //POST- CREATE
 exports.newDataBody = function(req, res) {
     var resource = req.body;
+    console.log(resource);
     resource['date'] = new Date().addHours(-6);
     resource['hour'] = new Date().addHours(-6).getHours();
     resource['minute'] = new Date().addHours(-6).getMinutes();
