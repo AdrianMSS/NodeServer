@@ -46,7 +46,7 @@ var mqtt_url = url.parse(process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883');
 var auth = (mqtt_url.auth || ':').split(':');
 var lastOne = {};
 
-var client = mqtt.createClient(mqtt_url.port, mqtt_url.hostname, { //Cliente MQTT
+/*var client = mqtt.createClient(mqtt_url.port, mqtt_url.hostname, { //Cliente MQTT
   username: auth[0],
   password: auth[1]
 });
@@ -70,6 +70,7 @@ client.on('connect', function() {
     console.log("Mensaje publicado");
   });
 });
+*/
 
 app.get('/mqtt/url', function (req, res) {
     res.send(mqtt_url, 200);
