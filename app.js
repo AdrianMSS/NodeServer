@@ -8,16 +8,15 @@
 var express = require('express'), //Biblioteca para permitir servicios REST
     cookieParser = require('cookie-parser'), 
     bodyParser = require('body-parser'), //Biblioteca para manejar los datos de las solicitudes
-    mqtt = require('mqtt'), url = require('url'),//Biblioteca para manejar los solicitudes MQTT
-    cors = require('cors'); //Boblioteca para permitir llamadas CORS
+    mqtt = require('mqtt'), url = require('url'); //Biblioteca para manejar los solicitudes MQTT
 
 //REST APIS
-var  database = require('./services/database'); //Archivo donde vamos a comunicarnos con la base de datos
+var  database = require('./services/database'),
+  remora = require('./services/remora'); //Archivo donde vamos a comunicarnos con la base de datos
 
 var app = express(); //Instancia de express
 app.use(express.logger('dev')); //Método de ver los mensajes en consola
 app.use(bodyParser());
-app.use(cors()); //Permite CORS en todas las rutas
 
 app.use(express.static(__dirname + '/webpage')); //Página por defecto al ingresar al servidor
 app.use('/imaginexyz', express.static(__dirname + '/graphs')); //Página para vizualizar los datos ingresados
@@ -32,6 +31,13 @@ app.put('/imaginexyz/genuinoday', database.editData); //PUT
 app.delete('/imaginexyz/genuinoday', database.removeData); //DELETE
 
 app.get('/imaginexyz/graphs', database.getInfo); //Query para obtener cantidades de los datos enviados y leidos
+app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
+
+app.post('/gps/headers', remora.getHeaders); //Query para obtener los datos enviados y leidos por minuto
+app.post('/gps/sabana', remora.getSabana); //Query para obtener los datos enviados y leidos por minuto
+app.get('/gps/today', remora.getToday); //Query para obtener los datos enviados y leidos por minuto
+app.post('/gps/today', remora.insertToday); //Query para obtener los datos enviados y leidos por minuto
+app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 
 
