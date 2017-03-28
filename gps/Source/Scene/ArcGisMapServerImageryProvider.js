@@ -95,7 +95,6 @@ define([
      *
      * @see BingMapsImageryProvider
      * @see GoogleEarthImageryProvider
-     * @see createOpenStreetMapImageryProvider
      * @see SingleTileImageryProvider
      * @see TileMapServiceImageryProvider
      * @see WebMapServiceImageryProvider

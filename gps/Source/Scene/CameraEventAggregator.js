@@ -5,7 +5,6 @@ define([
         '../Core/defineProperties',
         '../Core/destroyObject',
         '../Core/DeveloperError',
-        '../Core/KeyboardEventModifier',
         '../Core/Math',
         '../Core/ScreenSpaceEventHandler',
         '../Core/ScreenSpaceEventType',
@@ -16,7 +15,6 @@ define([
         defineProperties,
         destroyObject,
         DeveloperError,
-        KeyboardEventModifier,
         CesiumMath,
         ScreenSpaceEventHandler,
         ScreenSpaceEventType,
@@ -281,20 +279,6 @@ define([
         listenMouseButtonDownUp(this, undefined, CameraEventType.RIGHT_DRAG);
         listenMouseButtonDownUp(this, undefined, CameraEventType.MIDDLE_DRAG);
         listenMouseMove(this, undefined);
-
-        for ( var modifierName in KeyboardEventModifier) {
-            if (KeyboardEventModifier.hasOwnProperty(modifierName)) {
-                var modifier = KeyboardEventModifier[modifierName];
-                if (defined(modifier)) {
-                    listenToWheel(this, modifier);
-                    listenToPinch(this, modifier, canvas);
-                    listenMouseButtonDownUp(this, modifier, CameraEventType.LEFT_DRAG);
-                    listenMouseButtonDownUp(this, modifier, CameraEventType.RIGHT_DRAG);
-                    listenMouseButtonDownUp(this, modifier, CameraEventType.MIDDLE_DRAG);
-                    listenMouseMove(this, modifier);
-                }
-            }
-        }
     }
 
     defineProperties(CameraEventAggregator.prototype, {
@@ -314,15 +298,6 @@ define([
          * @memberof CameraEventAggregator.prototype
          * @type {Boolean}
          */
-        anyButtonDown : {
-            get : function() {
-                var wheelMoved = !this._update[getKey(CameraEventType.WHEEL)] ||
-                                 !this._update[getKey(CameraEventType.WHEEL, KeyboardEventModifier.SHIFT)] ||
-                                 !this._update[getKey(CameraEventType.WHEEL, KeyboardEventModifier.CTRL)] ||
-                                 !this._update[getKey(CameraEventType.WHEEL, KeyboardEventModifier.ALT)];
-                return this._buttonsDown > 0 || wheelMoved;
-            }
-        }
     });
 
     /**

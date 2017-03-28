@@ -14,6 +14,20 @@ function startup(Cesium) {
         minDis = 9999999999,
         points = 0;
 
+    var testDoc = [{"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
+                    {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2}];
+
 
     /*var arrayPos = [{"_id":"5750deb65edc1503005ff530","fecha":20160603013435,"lat":9.931947,"lon":-84.048767,"vel":6.39,"alt":1243.4,"date":"2016-06-02T19:34:46.199Z","hour":19,"minute":34},{"_id":"5750df7d5edc1503005ff531","fecha":20160603013754,"lat":9.935857,"lon":-84.05703,"vel":40.74,"alt":1209.5,"date":"2016-06-02T19:38:05.799Z","hour":19,"minute":38},{"_id":"5750e0b35edc1503005ff532","fecha":20160603014304,"lat":9.935855,"lon":-84.063141,"vel":0.35,"alt":1216.1,"date":"2016-06-02T19:43:15.540Z","hour":19,"minute":43},{"_id":"575fb0115eb84a0300cc8b54","fecha":20160614071939,"lat":9.938708,"lon":-84.060707,"vel":1.3,"alt":148.3,"date":"2016-06-14T01:19:45.391Z","hour":1,"minute":19},{"_id":"575fb09f5eb84a0300cc8b56","fecha":20160614072155,"lat":9.938797,"lon":-84.060844,"vel":1.09,"alt":75.2,"date":"2016-06-14T01:22:07.242Z","hour":1,"minute":22},{"_id":"57602d20687fa10300442936","fecha":20160614161313,"lat":9.959388,"lon":-84.060524,"vel":1.52,"alt":148.3,"date":"2016-06-14T10:13:20.498Z","hour":10,"minute":13},{"_id":"57603193687fa10300442937","fecha":20160614163213,"lat":9.937643,"lon":-84.061226,"vel":1.8,"alt":1209.5,"date":"2016-06-14T10:32:19.404Z","hour":10,"minute":32},{"_id":"576032c8687fa10300442938","fecha":20160614163717,"lat":9.937685,"lon":-84.061134,"vel":0.67,"alt":1204.6,"date":"2016-06-14T10:37:28.503Z","hour":10,"minute":37},{"_id":"576033fd687fa10300442939","fecha":20160614164227,"lat":9.937732,"lon":-84.061249,"vel":1.93,"alt":1203.1,"date":"2016-06-14T10:42:37.985Z","hour":10,"minute":42},{"_id":"57603532687fa1030044293a","fecha":20160614164735,"lat":9.937683,"lon":-84.060989,"vel":0.39,"alt":1204.2,"date":"2016-06-14T10:47:46.349Z","hour":10,"minute":47}],
         arrayPosClean = [];
@@ -34,7 +48,7 @@ function startup(Cesium) {
         }
     });*/
 
-    /*var santacruzPolygon = viewer.entities.add({
+    var santacruzPolygon = viewer.entities.add({
         name : 'Zona Protegida de Santa Cruz',
         polygon : {
             hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights([-85.950025, 10.9011667, 0,
@@ -68,7 +82,7 @@ function startup(Cesium) {
         }
     });
 
-    var manuelantonioPolygon = viewer.entities.add({
+    /*var manuelantonioPolygon = viewer.entities.add({
         name : 'Zona Protegida de Manuel Antonio',
         polygon : {
             hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights([-84.115449, 9.375164, 0,
@@ -204,7 +218,7 @@ function startup(Cesium) {
     });*/
 
 
-    var sabanaPolygon = viewer.entities.add({
+    /*var sabanaPolygon = viewer.entities.add({
         name : 'Volkspark Friedrichshain',
         polygon : {
             hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights([ 13.42522679258483, 52.528260549488884, 0,
@@ -227,7 +241,7 @@ function startup(Cesium) {
             outline : true,
             outlineColor : Cesium.Color.BLACK
         }
-    });
+    });*/
     //LIGHTGREY
 
     viewer.zoomTo(viewer.entities);
@@ -241,12 +255,11 @@ function startup(Cesium) {
         // We define what will happen if the data are successfully sent
         XHR.addEventListener('load', function(event) {
             var arrayPos = JSON.parse(event.target.response);
-            console.log(arrayPos.pos.length);
-            if(arrayPos.pos.length > 0){
-                if(points < (arrayPos.pos.length - 1)){
+            if(arrayPos.length > 0){
+                if(points < (arrayPos.length - 1)){
                     var arrayToday = [];
-                    points = arrayPos.pos.length -1;
-                    arrayPos.pos.forEach(function(punto, index){
+                    points = arrayPos.length -1;
+                    arrayPos.forEach(function(punto, index){
                         if(points >= index){
                             arrayToday.push(punto.lon);
                             arrayToday.push(punto.lat);
@@ -265,7 +278,61 @@ function startup(Cesium) {
                     });
                 }
             }
-            setTimeout(function(){ getToday() }, 1000);
+            var myTableDiv = document.getElementById("tableDiv");
+            var table = document.createElement('TABLE');
+            var tableBody = document.createElement('TBODY');
+            var tr1 = document.createElement('TR');
+            var td1 = document.createElement('TH');
+            var td2 = document.createElement('TH');
+            var td3 = document.createElement('TH');
+            var td4 = document.createElement('TH');
+            var td5 = document.createElement('TH');
+            var td6 = document.createElement('TH');
+            var td7 = document.createElement('TH');
+            var td8 = document.createElement('TH');
+            myTableDiv.removeChild(list.childNodes[0]);
+            td1.appendChild(document.createTextNode('Hora'));
+            td2.appendChild(document.createTextNode('Latitud'));
+            td3.appendChild(document.createTextNode('Longitud'));
+            td4.appendChild(document.createTextNode('Velocidad'));
+            td5.appendChild(document.createTextNode('Altura'));
+            td6.appendChild(document.createTextNode('Head'));
+            tr1.appendChild(td1);
+            tr1.appendChild(td2);
+            tr1.appendChild(td3);
+            tr1.appendChild(td4);
+            tr1.appendChild(td5);
+            tr1.appendChild(td6);
+            tableBody.appendChild(tr1);
+
+            for (var i = 0; i < arrayPos.length; i++) {
+                var tr1 = document.createElement('TR');
+                var td1 = document.createElement('TD');
+                var td2 = document.createElement('TD');
+                var td3 = document.createElement('TD');
+                var td4 = document.createElement('TD');
+                var td5 = document.createElement('TD');
+                var td6 = document.createElement('TD');
+                var min = arrayPos[i].minute;
+                if(parseInt(min)<10) min = '0'+parseInt(min);
+                td1.appendChild(document.createTextNode(arrayPos[i].hour +':'+ min));
+                td2.appendChild(document.createTextNode(arrayPos[i].lat));
+                td3.appendChild(document.createTextNode(arrayPos[i].lon));
+                td4.appendChild(document.createTextNode(arrayPos[i].vel));
+                td5.appendChild(document.createTextNode(arrayPos[i].alt));
+                td6.appendChild(document.createTextNode(arrayPos[i].Head));
+                tr1.appendChild(td1);
+                tr1.appendChild(td2);
+                tr1.appendChild(td3);
+                tr1.appendChild(td4);
+                tr1.appendChild(td5);
+                tr1.appendChild(td6);
+                tableBody.appendChild(tr1);
+            }
+
+            table.appendChild(tableBody);
+            myTableDiv.appendChild(table);
+            setTimeout(function(){ getToday() }, 2000);
 
             //
             //PolylineGlowMaterialProperty
@@ -285,6 +352,7 @@ function startup(Cesium) {
 
         // We just send our FormData object, HTTP headers are set automatically
         XHR.send();
+        //{"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2}
     }
 
     function startGeofences(e) {

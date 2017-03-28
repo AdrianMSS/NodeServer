@@ -11,7 +11,6 @@ define([
         '../Core/Ellipsoid',
         '../Core/IntersectionTests',
         '../Core/isArray',
-        '../Core/KeyboardEventModifier',
         '../Core/Math',
         '../Core/Matrix3',
         '../Core/Matrix4',
@@ -36,7 +35,6 @@ define([
         Ellipsoid,
         IntersectionTests,
         isArray,
-        KeyboardEventModifier,
         CesiumMath,
         Matrix3,
         Matrix4,
@@ -211,13 +209,6 @@ define([
          *     modifier : {@link KeyboardEventModifier.CTRL}
          * }]
          */
-        this.tiltEventTypes = [CameraEventType.MIDDLE_DRAG, CameraEventType.PINCH, {
-            eventType : CameraEventType.LEFT_DRAG,
-            modifier : KeyboardEventModifier.CTRL
-        }, {
-            eventType : CameraEventType.RIGHT_DRAG,
-            modifier : KeyboardEventModifier.CTRL
-        }];
         /**
          * The input that allows the user to change the direction the camera is viewing. This only applies in 3D and Columbus view modes.
          * <p>
@@ -228,10 +219,6 @@ define([
          * @type {CameraEventType|Array|undefined}
          * @default { eventType : {@link CameraEventType.LEFT_DRAG}, modifier : {@link KeyboardEventModifier.SHIFT} }
          */
-        this.lookEventTypes = {
-            eventType : CameraEventType.LEFT_DRAG,
-            modifier : KeyboardEventModifier.SHIFT
-        };
         /**
          * The minimum height the camera must be before picking the terrain instead of the ellipsoid.
          * @type {Number}
