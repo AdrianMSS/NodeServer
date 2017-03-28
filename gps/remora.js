@@ -290,7 +290,6 @@ function startup(Cesium) {
             var td6 = document.createElement('TH');
             var td7 = document.createElement('TH');
             var td8 = document.createElement('TH');
-            myTableDiv.removeChild(list.childNodes[0]);
             td1.appendChild(document.createTextNode('Hora'));
             td2.appendChild(document.createTextNode('Latitud'));
             td3.appendChild(document.createTextNode('Longitud'));
