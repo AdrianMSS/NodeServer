@@ -2,7 +2,7 @@
   "name": "NodeServer",
   "version": "0.2.0",
   "description": "IoT Server with NodeJs and MongoDB",
-  "main": "app.js",
+  "main": "server.js",
   "engines" : { 
       "node" : "0.10.31",
       "npm" : ">=1.4"
