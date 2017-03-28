@@ -79,9 +79,8 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  var now = new Date().addHours(1),
-    nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
-  db.collection('Positions').findOne({date:nowString}, function(err, doc) {
+  var now = new Date().addHours(1);
+  db.collection('Zeus').find({}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         res.send(200, doc);
