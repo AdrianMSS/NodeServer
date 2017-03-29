@@ -48,7 +48,7 @@ function startup(Cesium) {
         }
     });*/
 
-    var santacruzPolygon = viewer.entities.add({
+    /*var santacruzPolygon = viewer.entities.add({
         name : 'Zona Protegida de Santa Cruz',
         polygon : {
             hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights([-85.950025, 10.9011667, 0,
@@ -80,7 +80,7 @@ function startup(Cesium) {
             outline : true,
             outlineColor : Cesium.Color.BLACK
         }
-    });
+    });*/
 
     /*var manuelantonioPolygon = viewer.entities.add({
         name : 'Zona Protegida de Manuel Antonio',
@@ -281,7 +281,7 @@ function startup(Cesium) {
                     });
                 }
             }
-            viewer.zoomTo(viewer.entities);
+            //viewer.zoomTo(viewer.entities);
 
             var myTableDiv = document.getElementById("tableDiv");
             var table = document.createElement('TABLE');

@@ -94,6 +94,8 @@ exports.insertToday = function(req, res) {
     now = new Date().addHours(-6),
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
   pos['date'] = nowString;
+  pos['hour'] = new Date().addHours(-6).getHours();
+  pos['minute'] = new Date().addHours(-6).getMinutes();
   db.collection('Zeus').insert(pos ,function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
