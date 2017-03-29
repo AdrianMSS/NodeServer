@@ -287,22 +287,17 @@ function startup(Cesium) {
             var td3 = document.createElement('TH');
             var td4 = document.createElement('TH');
             var td5 = document.createElement('TH');
-            var td6 = document.createElement('TH');
-            var td7 = document.createElement('TH');
-            var td8 = document.createElement('TH');
             myTableDiv.removeChild(myTableDiv.childNodes[0]);
-            td1.appendChild(document.createTextNode('Hora'));
-            td2.appendChild(document.createTextNode('Latitud'));
-            td3.appendChild(document.createTextNode('Longitud'));
-            td4.appendChild(document.createTextNode('Velocidad'));
+            td1.appendChild(document.createTextNode('Fecha'));
+            td2.appendChild(document.createTextNode('Hora'));
+            td3.appendChild(document.createTextNode('Latitud'));
+            td4.appendChild(document.createTextNode('Longitud'));
             td5.appendChild(document.createTextNode('Altura'));
-            td6.appendChild(document.createTextNode('Head'));
             tr1.appendChild(td1);
             tr1.appendChild(td2);
             tr1.appendChild(td3);
             tr1.appendChild(td4);
             tr1.appendChild(td5);
-            tr1.appendChild(td6);
             tableBody.appendChild(tr1);
 
             for (var i = 0; i < arrayPos.length; i++) {
@@ -312,21 +307,18 @@ function startup(Cesium) {
                 var td3 = document.createElement('TD');
                 var td4 = document.createElement('TD');
                 var td5 = document.createElement('TD');
-                var td6 = document.createElement('TD');
                 var min = arrayPos[i].minute;
                 if(parseInt(min)<10) min = '0'+parseInt(min);
-                td1.appendChild(document.createTextNode(arrayPos[i].hour +':'+ min));
-                td2.appendChild(document.createTextNode(arrayPos[i].lat));
-                td3.appendChild(document.createTextNode(arrayPos[i].lon));
-                td4.appendChild(document.createTextNode(arrayPos[i].vel));
+                td1.appendChild(document.createTextNode(arrayPos[i].date));
+                td2.appendChild(document.createTextNode(arrayPos[i].hour +':'+ min));
+                td3.appendChild(document.createTextNode(arrayPos[i].lat));
+                td4.appendChild(document.createTextNode(arrayPos[i].lon));
                 td5.appendChild(document.createTextNode(arrayPos[i].alt));
-                td6.appendChild(document.createTextNode(arrayPos[i].Head));
                 tr1.appendChild(td1);
                 tr1.appendChild(td2);
                 tr1.appendChild(td3);
                 tr1.appendChild(td4);
                 tr1.appendChild(td5);
-                tr1.appendChild(td6);
                 tableBody.appendChild(tr1);
             }
 
