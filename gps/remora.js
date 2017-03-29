@@ -259,6 +259,7 @@ function startup(Cesium) {
                 if(points < (arrayPos.length - 1)){
                     var arrayToday = [];
                     points = arrayPos.length -1;
+                    console.log(arrayPos);
                     arrayPos.forEach(function(punto, index){
                         if(points >= index){
                             arrayToday.push(punto.lon);
