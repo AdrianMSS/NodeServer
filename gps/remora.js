@@ -256,6 +256,7 @@ function startup(Cesium) {
         XHR.addEventListener('load', function(event) {
             var arrayPos = JSON.parse(event.target.response);
             if(arrayPos.length > 0){
+                console.log(arrayPos);
                 if(points < (arrayPos.length - 1)){
                     var arrayToday = [];
                     points = arrayPos.length -1;
@@ -279,6 +280,8 @@ function startup(Cesium) {
                     });
                 }
             }
+            viewer.zoomTo(viewer.entities);
+            
             var myTableDiv = document.getElementById("tableDiv");
             var table = document.createElement('TABLE');
             var tableBody = document.createElement('TBODY');
