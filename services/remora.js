@@ -79,7 +79,7 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  var now = new Date().addHours(1),
+  var now = new Date().addHours(-6),
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
   db.collection('Zeus').find({date:nowString}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
@@ -91,7 +91,7 @@ exports.getToday = function(req, res) {
 
 exports.insertToday = function(req, res) {
   var pos = req.body,
-    now = new Date().addHours(1),
+    now = new Date().addHours(-6),
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
   pos['date'] = nowString;
   db.collection('Zeus').insert(pos ,function(err, doc) {
