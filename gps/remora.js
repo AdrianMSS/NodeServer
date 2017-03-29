@@ -263,6 +263,7 @@ function startup(Cesium) {
                     console.log(arrayPos);
                     arrayPos.forEach(function(punto, index){
                         if(points >= index){
+                            console.log('added');
                             arrayToday.push(punto.lon);
                             arrayToday.push(punto.lat);
                             arrayToday.push(0);
@@ -281,7 +282,7 @@ function startup(Cesium) {
                 }
             }
             viewer.zoomTo(viewer.entities);
-            
+
             var myTableDiv = document.getElementById("tableDiv");
             var table = document.createElement('TABLE');
             var tableBody = document.createElement('TBODY');
