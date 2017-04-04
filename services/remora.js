@@ -80,8 +80,11 @@ exports.getSabana = function(req,res) {
 
 exports.getToday = function(req, res) {
   var now = new Date().addHours(-6),
-    nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
-  db.collection('Zeus').find({date:nowString}).toArray(function(err, doc) {
+    nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString2 = (now.getDate() - 1) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString3 = (now.getDate() - 2) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString4 = (now.getDate() - 3) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
+  db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4}]}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         res.send(200, doc);
