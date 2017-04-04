@@ -83,8 +83,13 @@ exports.getToday = function(req, res) {
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
     nowString2 = (now.getDate() - 1) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
     nowString3 = (now.getDate() - 2) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString4 = (now.getDate() - 3) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
-  db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4}]}).toArray(function(err, doc) {
+    nowString4 = (now.getDate() - 3) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString5 = (now.getDate() - 4) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString6 = (now.getDate() - 5) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString7 = (now.getDate() - 6) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString8 = (now.getDate() - 7) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
+    nowString9 = (now.getDate() - 8) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
+  db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4},{date:nowString5},{date:nowString6},{date:nowString7},{date:nowString8},{date:nowString9}]}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         res.send(200, doc);
