@@ -80,15 +80,23 @@ exports.getSabana = function(req,res) {
 
 exports.getToday = function(req, res) {
   var now = new Date().addHours(-6),
+    now2 = new Date().addHours(-30),
+    now3 = new Date().addHours(-54),
+    now4 = new Date().addHours(-78),
+    now5 = new Date().addHours(-102),
+    now6 = new Date().addHours(-126),
+    now7 = new Date().addHours(-150),
+    now8 = new Date().addHours(-174),
+    now9 = new Date().addHours(-198),
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString2 = (now.getDate() - 1) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString3 = (now.getDate() - 2) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString4 = (now.getDate() - 3) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString5 = (now.getDate() - 4) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString6 = (now.getDate() - 5) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString7 = (now.getDate() - 6) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString8 = (now.getDate() - 7) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear(),
-    nowString9 = (now.getDate() - 8) + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
+    nowString2 = now2.getDate() + '/' + (now2.getMonth() + 1) + '/' + now2.getUTCFullYear(),
+    nowString3 = now3.getDate() + '/' + (now3.getMonth() + 1) + '/' + now3.getUTCFullYear(),
+    nowString4 = now4.getDate() + '/' + (now4.getMonth() + 1) + '/' + now4.getUTCFullYear(),
+    nowString5 = now5.getDate() + '/' + (now5.getMonth() + 1) + '/' + now5.getUTCFullYear(),
+    nowString6 = now6.getDate() + '/' + (now6.getMonth() + 1) + '/' + now6.getUTCFullYear(),
+    nowString7 = now7.getDate() + '/' + (now7.getMonth() + 1) + '/' + now7.getUTCFullYear(),
+    nowString8 = now8.getDate() + '/' + (now8.getMonth() + 1) + '/' + now8.getUTCFullYear(),
+    nowString9 = now9.getDate() + '/' + (now9.getMonth() + 1) + '/' + now9.getUTCFullYear();
   db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4},{date:nowString5},{date:nowString6},{date:nowString7},{date:nowString8},{date:nowString9}]}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
