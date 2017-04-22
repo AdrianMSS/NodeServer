@@ -79,7 +79,16 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  db.collection('Zeus').find({date: {$gt:"21/04/2017"}}).toArray(function(err, doc) {
+  var nowString ="21/4/2017",
+    nowString2 ="22/4/2017",
+    nowString3 ="23/4/2017",
+    nowString4 ="24/4/2017",
+    nowString5 ="25/4/2017",
+    nowString6 ="26/4/2017",
+    nowString7 ="27/4/2017",
+    nowString8 ="28/4/2017",
+    nowString9 ="29/4/2017";
+  db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4},{date:nowString5},{date:nowString6},{date:nowString7},{date:nowString8},{date:nowString9}]}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         res.send(200, doc);
