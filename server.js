@@ -3,7 +3,6 @@
 * @autor Adrián Sánchez <contact@imaginexyz.com>
 */
 
-
 //Módulos Necesitados
 var express = require('express'), //Biblioteca para permitir servicios REST
     cookieParser = require('cookie-parser'), 
