@@ -15,6 +15,7 @@
     "mongodb": "*",
     "url": "*",
     "mqtt": "*",
-    "cors": "*"
+    "cors": "*",
+    "socket.io": "*"
   }
 }
