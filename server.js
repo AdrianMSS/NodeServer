@@ -50,9 +50,7 @@ var lastOne = {};
   username: auth[0],
   password: auth[1]
 });
-
 client.on('connect', function() {
-
   //Subscribirse a un tema
   client.subscribe('imaginexyz/listen', function() {
     
@@ -64,7 +62,6 @@ client.on('connect', function() {
         console.log(message + "' recibido en el tema: '" + topic + "'");
     });
   });
-
   // publish a message to a topic
   client.publish('imaginexyz/connected', 'conectado', function() {
     console.log("Mensaje publicado");
