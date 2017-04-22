@@ -6,8 +6,7 @@
 //Módulos Necesitados
 var express = require('express'), //Biblioteca para permitir servicios REST
     cookieParser = require('cookie-parser'), 
-    bodyParser = require('body-parser'), //Biblioteca para manejar los datos de las solicitudes
-    mqtt = require('mqtt'), url = require('url'); //Biblioteca para manejar los solicitudes MQTT
+    bodyParser = require('body-parser'); //Biblioteca para manejar los datos de las solicitudes
 
 //REST APIS
 var  database = require('./services/database'),
@@ -40,10 +39,6 @@ app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos 
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 
 
-//Servicios MQTT permitidos
-var mqtt_url = url.parse(process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883');
-var auth = (mqtt_url.auth || ':').split(':');
-var lastOne = {};
 
 /*var client = mqtt.createClient(mqtt_url.port, mqtt_url.hostname, { //Cliente MQTT
   username: auth[0],
@@ -68,13 +63,6 @@ client.on('connect', function() {
 });
 */
 
-app.get('/mqtt/url', function (req, res) {
-    res.send(mqtt_url, 200);
-});
-
-app.get('/mqtt/message', function (req, res) {
-    res.send(lastOne, 200);
-});
 
 //Redirección por defecto
 app.get('*', function (req, res) {
