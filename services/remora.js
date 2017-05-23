@@ -95,6 +95,7 @@ exports.getToday = function(req, res) {
 }
 
 exports.insertToday = function(req, res) {
+  console.log(req.body)
   var pos = req.body,
     now = new Date().addHours(-6),
     nowString = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getUTCFullYear();
