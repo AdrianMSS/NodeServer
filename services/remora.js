@@ -79,7 +79,7 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  db.collection('Zeus').find({date:{"$gte":"11/5/2017"}}).toArray(function(err, doc) {
+  db.collection('Zeus').find({"_id":{"$gte":ObjectId('590a1f380b7f20000499c52f')}}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         doc.forEach(function(element, index){
