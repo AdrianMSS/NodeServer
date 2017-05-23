@@ -404,7 +404,7 @@ function startup(Cesium) {
         });
 
         // We setup our request
-        XHR.open('GET', 'http://localhost:3000/gps/today', true);
+        XHR.open('GET', 'https://imaginexyz-genuinoday.herokuapp.com/gps/today', true);
 
         XHR.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
@@ -510,7 +510,7 @@ function startup(Cesium) {
                 });
 
                 // We setup our request
-                XHR.open('POST', 'https://localhost:3000/gps/sabana', true);
+                XHR.open('POST', 'https://imaginexyz-genuinoday.herokuapp.com/gps/sabana', true);
 
                 XHR.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
