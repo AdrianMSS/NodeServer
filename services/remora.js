@@ -79,18 +79,14 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  var nowString ="21/4/2017",
-    nowString2 ="22/4/2017",
-    nowString3 ="23/4/2017",
-    nowString4 ="24/4/2017",
-    nowString5 ="25/4/2017",
-    nowString6 ="26/4/2017",
-    nowString7 ="27/4/2017",
-    nowString8 ="28/4/2017",
-    nowString9 ="29/4/2017";
-  db.collection('Zeus').find({$or: [{date:nowString},{date:nowString2},{date:nowString3},{date:nowString4},{date:nowString5},{date:nowString6},{date:nowString7},{date:nowString8},{date:nowString9}]}).toArray(function(err, doc) {
+  db.collection('Zeus').find({date:{"$gte":"11/5/2017"}}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
+        doc.forEach(function(element, index){
+          var fecha = ""+element.fecha;
+          fecha = fecha.slice(6,8) + "/" + fecha.slice(4,6) + "/" + fecha.slice(0,4) + "  " + fecha.slice(8,10) + ":" + fecha.slice(10,12) + "." + fecha.slice(12,14);
+          element.fecha = fecha;
+        })
         res.send(200, doc);
       }
   });

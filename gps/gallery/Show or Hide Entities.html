@@ -69,7 +69,7 @@ for (var i = 0; i < 5; ++i) {
     });
 }
 
-viewer.zoomTo(viewer.entities);
+viewer.zoomTo(viewer.entities, new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0),Cesium.Math.toRadians(-45), 1000));
 
 Sandcastle.addToolbarButton('Toggle Boxes', function(){
     boxes.show = !boxes.show;

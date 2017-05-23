@@ -41,7 +41,7 @@ var viewer = new Cesium.Viewer('cesiumContainer', {
 
 var dataSource = Cesium.GeoJsonDataSource.load('../../SampleData/simplestyles.geojson');
 viewer.dataSources.add(dataSource);
-viewer.zoomTo(dataSource);
+viewer.zoomTo(dataSource, new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0),Cesium.Math.toRadians(-45), 1000));
 //Sandcastle_End
     Sandcastle.finishedLoading();
 }

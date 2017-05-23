@@ -9,10 +9,13 @@ function startup(Cesium) {
         geoArray = [],
         geoMap = [],
         geoEntities = [],
+        pointsEntities = [],
         geoHere = {},
         geoDate = new Date(),
+        geoStart = false,
         minDis = 9999999999,
-        points = 0;
+        points = 0,
+        prevPos = [];
 
     var testDoc = [{"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
                     {"_id":293,"fecha":20170327220157,"lat":9.937657,"lon":-84.061157,"vel":0,"alt":1198.7,"Head":300,"RSSI":18,"date":"2017-03-27T16:02:03.087Z","hour":16,"minute":2},
@@ -256,17 +259,38 @@ function startup(Cesium) {
         XHR.addEventListener('load', function(event) {
             var arrayPos = JSON.parse(event.target.response);
             if(arrayPos.length > 0){
-                console.log(arrayPos);
+                //console.log(arrayPos);
                 if(points < (arrayPos.length - 1)){
+                    viewer.entities.removeAll(); 
                     var arrayToday = [];
                     points = arrayPos.length -1;
-                    console.log(arrayPos);
+                    //console.log(arrayPos);
                     arrayPos.forEach(function(punto, index){
                         if(points >= index){
-                            console.log('added');
+                            if(index == 0) {
+                                var str = "Inicio, " + punto.lat + " " + punto.lon;
+                            }
+                            else{
+                                var distance = Math.floor(Cesium.Cartesian3.distance(new Cesium.Cartesian3(prevPos[0],prevPos[1],0), new Cesium.Cartesian3(punto.lon, punto.lat, 0)) * 100000) / 1000,
+                                    str = "Distancia = " + distance + " Km " + punto.lat + " " + punto.lon;
+                            }
+                            var circleInstance = viewer.entities.add({
+                                position: Cesium.Cartesian3.fromDegrees(punto.lon, punto.lat),
+                                name : str,
+                                ellipse : {
+                                    semiMinorAxis : 10.0,
+                                    semiMajorAxis : 10.0,
+                                    height: 1,
+                                    material : Cesium.Color.GREEN,
+                                    outline : true // height must be set for outline to display
+                                },
+                                id : index
+                            });
+                            pointsEntities.push(circleInstance);
                             arrayToday.push(punto.lon);
                             arrayToday.push(punto.lat);
                             arrayToday.push(0);
+                            prevPos = [punto.lon, punto.lat];
                         }
                     });
 
@@ -279,9 +303,13 @@ function startup(Cesium) {
                             material : new Cesium.PolylineArrowMaterialProperty(Cesium.Color.ORANGE)
                         }
                     });
+                    if(!geoStart){
+                        viewer.zoomTo(viewer.entities);
+                        geoStart=true
+                    }
                 }
             }
-            //viewer.zoomTo(viewer.entities);
+            
 
             var myTableDiv = document.getElementById("tableDiv");
             var table = document.createElement('TABLE');
@@ -292,38 +320,72 @@ function startup(Cesium) {
             var td3 = document.createElement('TH');
             var td4 = document.createElement('TH');
             var td5 = document.createElement('TH');
+            var td6 = document.createElement('TH');
+            var td7 = document.createElement('TH');
+            var td8 = document.createElement('TH');
             myTableDiv.removeChild(myTableDiv.childNodes[0]);
-            td1.appendChild(document.createTextNode('Fecha'));
-            td2.appendChild(document.createTextNode('Hora'));
+            td1.appendChild(document.createTextNode('Fecha captura'));
+            td2.appendChild(document.createTextNode('Fecha recibida'));
             td3.appendChild(document.createTextNode('Latitud'));
             td4.appendChild(document.createTextNode('Longitud'));
             td5.appendChild(document.createTextNode('Altura'));
+            td6.appendChild(document.createTextNode('Revisar'));
+            td7.appendChild(document.createTextNode('Entre puntos'));
+            td8.appendChild(document.createTextNode('Distancia total'));
             tr1.appendChild(td1);
             tr1.appendChild(td2);
             tr1.appendChild(td3);
             tr1.appendChild(td4);
             tr1.appendChild(td5);
+            tr1.appendChild(td6);
+            tr1.appendChild(td7);
+            tr1.appendChild(td8);
+
             tableBody.appendChild(tr1);
+            var totalDistance = 0;
 
             for (var i = 0; i < arrayPos.length; i++) {
+                if(i==0){
+                    var distance = 0;
+                }
+                else{
+                    totalDistance += Cesium.Cartesian3.distance(new Cesium.Cartesian3(arrayPos[i-1].lon,arrayPos[i-1].lat,0), new Cesium.Cartesian3(arrayPos[i].lon, arrayPos[i].lat, 0));
+                    var distance = Math.floor(Cesium.Cartesian3.distance(new Cesium.Cartesian3(arrayPos[i-1].lon,arrayPos[i-1].lat,0), new Cesium.Cartesian3(arrayPos[i].lon, arrayPos[i].lat, 0)) * 100000) / 1000;
+                }
+                var btn = document.createElement("BUTTON");
+                var t = document.createTextNode("Ir");
+                btn.value = i;
+                btn.appendChild(t);
+                btn.addEventListener("click", function(e){
+                    goEntity(e,i);
+                });
                 var tr1 = document.createElement('TR');
                 var td1 = document.createElement('TD');
                 var td2 = document.createElement('TD');
                 var td3 = document.createElement('TD');
                 var td4 = document.createElement('TD');
                 var td5 = document.createElement('TD');
+                var td6 = document.createElement('TD');
+                var td7 = document.createElement('TD');
+                var td8 = document.createElement('TD');
                 var min = arrayPos[i].minute;
                 if(parseInt(min)<10) min = '0'+parseInt(min);
-                td1.appendChild(document.createTextNode(arrayPos[i].date));
-                td2.appendChild(document.createTextNode(arrayPos[i].hour +':'+ min));
+                td1.appendChild(document.createTextNode(arrayPos[i].fecha));
+                td2.appendChild(document.createTextNode(arrayPos[i].date + ' ' + arrayPos[i].hour +':'+ min));
                 td3.appendChild(document.createTextNode(arrayPos[i].lat));
                 td4.appendChild(document.createTextNode(arrayPos[i].lon));
                 td5.appendChild(document.createTextNode(arrayPos[i].alt));
+                td6.appendChild(btn);
+                td7.appendChild(document.createTextNode(distance+" Km"));
+                td8.appendChild(document.createTextNode((Math.floor(totalDistance * 100000) / 1000)+" Km"));
                 tr1.appendChild(td1);
                 tr1.appendChild(td2);
                 tr1.appendChild(td3);
                 tr1.appendChild(td4);
                 tr1.appendChild(td5);
+                tr1.appendChild(td6);
+                tr1.appendChild(td7);
+                tr1.appendChild(td8);
                 tableBody.appendChild(tr1);
             }
 
@@ -342,7 +404,7 @@ function startup(Cesium) {
         });
 
         // We setup our request
-        XHR.open('GET', 'https://imaginexyz-genuinoday.herokuapp.com/gps/today', true);
+        XHR.open('GET', 'http://localhost:3000/gps/today', true);
 
         XHR.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
@@ -359,8 +421,8 @@ function startup(Cesium) {
             geoHandler.destroy();
             geoArray=[];
             geoMap=[];
-            console.log(geoEntities);
-            console.log(geoEntities.length);
+            //console.log(geoEntities);
+            //console.log(geoEntities.length);
             viewer.entities.remove(geoEntities[geoEntities.length-1]);
             viewer.entities.remove(geoEntities[geoEntities.length-2]);
             viewer.entities.remove(geoEntities[geoEntities.length-3]);
@@ -448,7 +510,7 @@ function startup(Cesium) {
                 });
 
                 // We setup our request
-                XHR.open('POST', 'https://imaginexyz-genuinoday.herokuapp.com/gps/sabana', true);
+                XHR.open('POST', 'https://localhost:3000/gps/sabana', true);
 
                 XHR.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 
@@ -489,6 +551,17 @@ function startup(Cesium) {
 
             }
         }
+    }
+
+
+
+    function goEntity(e,val) {
+        //console.log(e.target.value);
+        viewer.zoomTo(pointsEntities[parseInt(e.target.value)],  
+            new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0),Cesium.Math.toRadians(-45), 1000));
+        //console.log(val);
+        //viewer.pickEntity(pointsEntities[parseInt(e.target.value)]);
+        //viewer.trackedEntity = pointsEntities[parseInt(e.target.value)];
     }
 
     document.getElementById("geoStart").addEventListener("click", startGeofences);

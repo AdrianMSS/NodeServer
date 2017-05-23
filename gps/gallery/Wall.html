@@ -72,7 +72,7 @@ var blueWall = viewer.entities.add({
         outlineColor : Cesium.Color.BLACK
     }
 });
-viewer.zoomTo(viewer.entities);
+viewer.zoomTo(viewer.entities, new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0),Cesium.Math.toRadians(-45), 1000));
 //Sandcastle_End
     Sandcastle.finishedLoading();
 }

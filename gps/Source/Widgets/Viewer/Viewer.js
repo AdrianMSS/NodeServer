@@ -12,6 +12,8 @@ define([
         '../../Core/isArray',
         '../../Core/Matrix4',
         '../../Core/ScreenSpaceEventType',
+        '../../Core/HeadingPitchRange',
+        '../../Core/Math',
         '../../DataSources/BoundingSphereState',
         '../../DataSources/ConstantPositionProperty',
         '../../DataSources/DataSourceCollection',
@@ -52,6 +54,8 @@ define([
         isArray,
         Matrix4,
         ScreenSpaceEventType,
+        HeadingPitchRange,
+        CesiumMath,
         BoundingSphereState,
         ConstantPositionProperty,
         DataSourceCollection,
@@ -283,6 +287,7 @@ define([
             throw new DeveloperError('container is required.');
         }
         //>>includeEnd('debug');
+
 
         container = getElement(container);
         options = defaultValue(options, defaultValue.EMPTY_OBJECT);
@@ -600,7 +605,10 @@ Either specify options.terrainProvider instead or set options.baseLayerPicker to
             if (defined(entity)) {
                 //Only track the entity if it has a valid position at the current time.
                 if (Property.getValueOrUndefined(entity.position, that.clock.currentTime)) {
-                    that.trackedEntity = entity;
+                    //that.trackedEntity = entity;
+                    //console.log(HeadingPitchRange);
+                    that.zoomTo(entity, new HeadingPitchRange(CesiumMath.toRadians(0),CesiumMath.toRadians(-45), 1000));
+
                 } else {
                     that.zoomTo(entity);
                 }
