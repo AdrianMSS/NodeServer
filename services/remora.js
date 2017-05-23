@@ -86,6 +86,8 @@ exports.getToday = function(req, res) {
           var fecha = ""+element.fecha;
           fecha = fecha.slice(6,8) + "/" + fecha.slice(4,6) + "/" + fecha.slice(0,4) + "  " + fecha.slice(8,10) + ":" + fecha.slice(10,12) + "." + fecha.slice(12,14);
           element.fecha = fecha;
+          if(element.hour === undefined)element.hour=0;
+          if(element.minute === undefined)element.minute=0;
         })
         res.send(200, doc);
       }
