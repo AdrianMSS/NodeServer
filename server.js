@@ -20,6 +20,7 @@ app.use(express.static(__dirname + '/webpage')); //Página por defecto al ingres
 app.use('/imaginexyz', express.static(__dirname + '/graphs')); //Página para vizualizar los datos ingresados
 app.use('/google', express.static(__dirname + '/google')); //Página para vizualizar los ejemplos de Google
 app.use('/gps', express.static(__dirname + '/gps')); //Página para vizualizar los datos del GPS
+app.use('/basic', express.static(__dirname + '/basic')); //Página para vizualizar los datos del GPS
 
 //Servicios REST permitidos
 app.get('/imaginexyz/genuinoday', database.getData);  //GET
@@ -37,6 +38,8 @@ app.get('/gps/today', remora.getToday); //Query para obtener los datos enviados 
 app.post('/gps/today', remora.insertToday); //Query para obtener los datos enviados y leidos por minuto
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
+
+app.get('/basic/today', remora.getToday); //Query para obtener los datos enviados y leidos por minuto
 
 
 
