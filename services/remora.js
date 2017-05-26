@@ -79,15 +79,17 @@ exports.getSabana = function(req,res) {
 }
 
 exports.getToday = function(req, res) {
-  db.collection('Zeus').find({"_id":{"$gte":mongo.ObjectId('590a1f380b7f20000499c52f')}}).toArray(function(err, doc) {
+  db.collection('Zeus').find({"_id":{"$gte":mongo.ObjectId('5926f692d1210500049de744')}}).toArray(function(err, doc) {
       if(err) {throw err;res.send(400, err);}
       else{
         doc.forEach(function(element, index){
           var fecha = ""+element.fecha;
-          fecha = fecha.slice(6,8) + "/" + fecha.slice(4,6) + "/" + fecha.slice(0,4) + "  " + fecha.slice(8,10) + ":" + fecha.slice(10,12) + "." + fecha.slice(12,14);
-          element.fecha = fecha;
+          //fecha = fecha.slice(6,8) + "-" + fecha.slice(4,6) + "-" + fecha.slice(0,4) + "  " + fecha.slice(8,10) + ":" + fecha.slice(10,12) + "." + fecha.slice(12,14);
+          var newDate = new Date(fecha.slice(0,4), parseInt(fecha.slice(4,6))-1, fecha.slice(6,8), fecha.slice(8,10), fecha.slice(10,12)).addHours(-6);
+          element.fecha = newDate;
           if(element.hour === undefined)element.hour=0;
           if(element.minute === undefined)element.minute=0;
+          element['newDate'] = newDate.getDate() + '/' + (newDate.getMonth() + 1) + '/' + newDate.getUTCFullYear() + ' ' + newDate.getHours() + ':' + newDate.getMinutes();
         })
         res.send(200, doc);
       }

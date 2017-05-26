@@ -51,7 +51,7 @@ function iniciar() {
 			arrayDist.push(newArray2);
 			numPos++;
 			html += '<tr><td>' + i.ID + '</td>';
-			html += '<td>' + i.fecha + '</td>';
+			html += '<td>' + i.newDate + '</td>';
 			html += '<td>' + i.lat + '</td>';
 			html += '<td>' + i.lon + '</td>';
 			html += '<td>' + distanceBetween + ' Km</td>';
@@ -72,7 +72,8 @@ function iniciar() {
 			html += '<td>' + i.fuel + '</td>';
 			html += '<td>' + i.Motor + '</td>';
 			html += '<td>' + i.QuadTree + '</td>';
-			html += '<td>' + i.RSSI + '</td></tr>';
+			html += '<td>' + i.RSSI + '</td>';
+			html += '<td>' + i.RAM + '</td></tr>';
 		})
 		$('#thetable tr').first().after(html);
 		drawChart(arrayVel, arrayDist);
