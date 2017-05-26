@@ -55,7 +55,7 @@ function iniciar() {
 			html += '<td>' + i.lat + '</td>';
 			html += '<td>' + i.lon + '</td>';
 			html += '<td>' + distanceBetween + ' Km</td>';
-			html += '<td>' + startDistance + ' Km</td>';
+			html += '<td>' + Math.floor(startDistance * 1000)/1000 + ' Km</td>';
 			html += '<td>' + i.vel + '</td>';
 			html += '<td>' + i.alt + '</td>';
 			html += '<td>' + i.Head + '</td>';
