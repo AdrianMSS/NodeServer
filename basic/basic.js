@@ -107,7 +107,7 @@ function drawChart(arrayVel, arrayDist) {
     new google.visualization.LineChart(document.getElementById('chart2')).
     draw(data2, {curveType: 'function', vAxes:[
       {title: 'Galones', titleTextStyle: {color: '#FF0000'}, maxValue: 2000}, // Left axis
-      {title: 'Km', titleTextStyle: {color: '#FF0000'}, maxValue: 5} // Right axis
+      {title: 'Km', titleTextStyle: {color: '#FF0000'}, maxValue: 200} // Right axis
     ],series:[
                 {targetAxisIndex:1},
                 {targetAxisIndex:0}
