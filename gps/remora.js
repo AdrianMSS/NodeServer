@@ -370,6 +370,7 @@ function startup(Cesium) {
                 var td8 = document.createElement('TD');
                 var min = arrayPos[i].minute;
                 if(parseInt(min)<10) min = '0'+parseInt(min);
+                console.log(arrayPos[i]);
                 td1.appendChild(document.createTextNode(arrayPos[i].fecha));
                 td2.appendChild(document.createTextNode(arrayPos[i].date));
                 td3.appendChild(document.createTextNode(arrayPos[i].lat));
