@@ -35,7 +35,7 @@ app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos 
 app.post('/gps/headers', remora.getHeaders); //Query para obtener los datos enviados y leidos por minuto
 app.post('/gps/sabana', remora.getSabana); //Query para obtener los datos enviados y leidos por minuto
 app.get('/gps/today', remora.getToday); //Query para obtener los datos enviados y leidos por minuto
-app.post('/gps/today', remora.insertToday); //Query para obtener los datos enviados y leidos por minuto
+app.post('/gps/today', remora.insertNewPoint); //Query para obtener los datos enviados y leidos por minuto
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 

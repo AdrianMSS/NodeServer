@@ -112,3 +112,36 @@ exports.insertToday = function(req, res) {
       }
   });
 }
+
+/*****Demo JonathanAGG*******/
+
+exports.insertNewPoint = function (req, res) {
+    
+        var pos = req.body;
+    
+        //Fecha actual del servidor
+        pos['dateServer'] = new Date().addHours(-6);
+    
+        //Dar formato a la fecha de remora
+        var fecha = "" + pos.fecha;
+        var dateRemora = new Date(fecha.slice(0, 4), parseInt(fecha.slice(4, 6)) - 1, fecha.slice(6, 8), fecha.slice(8, 10), fecha.slice(10, 12));
+        pos["dateRemora"] = dateRemora;
+    
+        //Dar formato al geoJson
+        pos['geo'] = {
+            type: "Point",
+            "coordinates": [pos.lon,pos.lat]
+        };
+    
+        delete pos['fecha'];
+        delete pos['lat'];
+        delete pos['lon'];
+        
+        //Insertar en DB
+        db.collection('Zeus2').insert(pos, function (err, doc) {
+            if (err) { throw err; res.send(400, err); }
+            else {
+                res.send(200, doc);
+            }
+        });
+    }
