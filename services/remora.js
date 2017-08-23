@@ -138,7 +138,7 @@ exports.insertNewPoint = function (req, res) {
         delete pos['lon'];
         
         //Insertar en DB
-        db.collection('Zeus2').insert(pos, function (err, doc) {
+        db.collection('Zeus').insert(pos, function (err, doc) {
             if (err) { throw err; res.send(400, err); }
             else {
                 res.send(200, doc);
