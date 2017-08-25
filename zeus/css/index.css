@@ -1,0 +1,81 @@
+/* Map */
+#map { position:absolute; top:0; bottom:0; width:100%; } 
+
+ .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+body {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+}
+/*Overlay nav*/
+.overlay {
+    height: 0%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0, 0.7);
+    overflow-y: hidden;
+    transition: 0.5s;
+    overflow:scroll; 
+}
+
+.overlay-content {
+    position: relative;
+    top: 5%;
+    text-align: center;
+    margin: 0% 10%;
+}
+
+.overlay-content div{
+    margin-top: 1%
+}
+
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+.overlay .closebtn {
+    position: absolute;
+    right: 5px;
+    font-size: 40px;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay {overflow-y: auto;}
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+    font-size: 40px;
+    right: 5px;
+  }
+}
+
+/* Others */
+.content *{
+    display: block; 
+    position: relative;
+}
+
+#dash-options{
+  margin: 1%;
+  float: right
+}
+
+#chart_div{
+    background-color: rgba(0,0,0, 0.9) !important;
+}

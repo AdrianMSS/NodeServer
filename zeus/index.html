@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Imagine XYZ-RemoraGPS</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css"
+    />
+</head>
+
+<body>
+
+    <div id='map'></div>
+
+    <div class="content">
+
+        <div id="dash-options">
+            <button class="btn btn-default" id="openNav"><span class="glyphicon glyphicon-stats"></span></button>
+        </div>
+    </div>
+<!-- View charts -->
+    <div id="navStats" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+        <div class="overlay-content">
+            <!-- Filter inputs -->
+            <div class="row">
+                <div class='col-md-4 col-md-offset-2 col-sm-12'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepickerInit'>
+                            <input type='text' class="form-control" id="dateInit"/>
+                            <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-4 col-sm-12'>
+                    <div class="form-group">
+                        <div class='input-group date' id='datetimepickerEnd'>
+                            <input type='text' class="form-control" id="dateEnd"/>
+                            <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-default" id="btnFilter">Filter</button>
+            </div>
+            <!-- Charts contents -->
+            <div id="chart_content" style="height: 700px"></div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Mapbox -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js'></script>
+    <!-- Moment -->
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+    <!-- bootstrap datetimepicker -->
+    <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- SocketIO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Lodash -->
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <!-- Highcharts -->
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <!-- Index -->
+    <script src="js/index.js"></script>
+</body>
+
+</html>
