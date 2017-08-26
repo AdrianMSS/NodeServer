@@ -30,12 +30,12 @@ socketEvents(io);
 app.use(express.logger('dev')); //Método de ver los mensajes en consola
 app.use(bodyParser());
 
-app.use('/webpage',express.static(__dirname + '/webpage')); //Página por defecto al ingresar al servidor
+app.use(express.static(__dirname + '/webpage')); //Página por defecto al ingresar al servidor
 app.use('/imaginexyz', express.static(__dirname + '/graphs')); //Página para vizualizar los datos ingresados
 app.use('/google', express.static(__dirname + '/google')); //Página para vizualizar los ejemplos de Google
 app.use('/gps', express.static(__dirname + '/gps')); //Página para vizualizar los datos del GPS
 app.use('/basic', express.static(__dirname + '/basic')); //Página para vizualizar los datos del GPS
-app.use(express.static(__dirname + '/zeus')); //Página para vizualizar los datos del GPS
+app.use('/zeus',express.static(__dirname + '/zeus')); //Página para vizualizar remora
 
 //Servicios REST permitidos
 app.get('/imaginexyz/genuinoday', database.getData);  //GET

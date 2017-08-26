@@ -76,6 +76,11 @@ body {
   float: right
 }
 
+#dash-options *{
+    margin-bottom: 9%;
+
+  }
+
 #chart_div{
     background-color: rgba(0,0,0, 0.9) !important;
 }

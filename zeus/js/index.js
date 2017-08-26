@@ -14,7 +14,6 @@ var gjPoints;
 
 //SocketIO
 var socket = io.connect('https://imaginexyz-genuinoday.herokuapp.com');
-
 //ALL_FEATURES
 socket.on('displayAllFeatures', function (data) {
 
@@ -25,37 +24,31 @@ socket.on('displayAllFeatures', function (data) {
 //UPDATE_SHIP
 socket.on('updateShip', function (data) {
 
-    console.log(data)
     gjPoints.features.push(data); //insertar el nuevo punto en el geojson de puntos
     map.getSource('scPoints').setData(gjPoints); //insertar el geojson de puntos actuializado al mapa
 
-            chart.series[0].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.vel)], true, false); //Speed
-            chart.series[1].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
-            chart.series[2].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
-            chart.series[3].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.alt)], true, false); //Height
-            chart.series[4].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
-            console.log(data)
-            console.log(chart.series[0].points) 
-
-    });
+    chart.series[0].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.vel)], true, false); //Speed
+    chart.series[1].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
+    chart.series[2].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
+    chart.series[3].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.alt)], true, false); //Height
+    chart.series[4].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
+});
 
 //Filter Data
 $('#btnFilter').click(function () {
 
-      var dateInit = $("#dateInit").val(),
+    var dateInit = $("#dateInit").val(),
         dateEnd = $("#dateEnd").val();
 
-    $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
+        $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
         .done(function (data) {
-            console.log("json");
-            console.log(data);
 
             //Actualizar el mapa
             map.getSource('scPoints').setData(data.gjPoints);
 
             //Actualizar los graficos
             jsonDataCharts.arrSpeed = [];
-            jsonDataCharts.arrFuel= [];
+            jsonDataCharts.arrFuel = [];
             jsonDataCharts.arrAlt = [];
             jsonDataCharts.arrRAM = [];
             jsonDataCharts.arrRSSI = [];
@@ -104,11 +97,11 @@ function drawMap(data) {
                 "<strong>Date Remora: </strong>" + e.features[0].properties.dateRemora +
                 "<br><strong>Date Server: </strong>" + e.features[0].properties.dateServer +
                 "<br><strong>GPS View: </strong>" + e.features[0].properties.GPSView +
-                    "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
-                    "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
-                    "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
-                    "<br><strong>Δ Time: </strong> coming soon :v" + 
-                    "<br><strong>Δ Distance: </strong> coming soon :v"
+                "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
+                "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
+                "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
+                "<br><strong>Δ Time: </strong> coming soon :v" +
+                "<br><strong>Δ Distance: </strong> coming soon :v"
 
                 )
                 .addTo(map);
@@ -136,13 +129,13 @@ function drawMap(data) {
 function generateDataCharts(data) {
 
     _.map(data.gjPoints.features, function (e) {
-
-        jsonDataCharts.arrSpeed.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.vel)]);
+        jsonDataCharts.arrSpeed.push({ x: new Date(e.properties.dateServer).getTime(), y: parseInt(e.properties.vel), id: e.properties._id });
+        //jsonDataCharts.arrSpeed.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.vel)]);
         jsonDataCharts.arrFuel.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.fuel)]);
         jsonDataCharts.arrAlt.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.alt)]);
         jsonDataCharts.arrRAM.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RAM)]);
         jsonDataCharts.arrRSSI.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RSSI)]);
-        
+
     });
 
     drawCharts()
@@ -183,12 +176,39 @@ function drawCharts(point) {
         },
         plotOptions: {
             series: {
+                
+                turboThreshold:0,
                 allowPointSelect: true,
                 cursor: 'pointer',
                 point: {
                     events: {
                         click: function () {
-                            //alert('Category: ' + this.category + ', value: ' + this.y);
+                            
+                             var id = this.id;
+
+                             console.log('id: '+id)
+                            _.forEach(gjPoints.features, function (e) {
+                                   
+                                if (e.properties._id == id) {
+
+                                    map.flyTo({
+
+                                        center: e.geometry.coordinates,
+                                        zoom: 16,
+                                        bearing: 0,
+                                        speed: 2.5,
+                                        curve: 1,
+
+                                        easing: function (t) {
+                                            return t;
+                                        }
+                                    });
+
+                                    $('#navStats').css('height', '0%');
+                                    return false;
+                                }
+                            });
+ 
                         }
                     }
                 }
@@ -299,13 +319,6 @@ $('#closeNav').click(function () {
     $('#navStats').css('height', '0%');
 });
 
-$('#openMultiChart').click(function () {
-    $('#navMultiChart').css('height', '100%');
-});
-$('#closeMultiChart').click(function () {
-    $('#navMultiChart').css('height', '0%');
-});
-
 //DataTimePicker
 $('#datetimepickerInit').datetimepicker();
 $('#datetimepickerEnd').datetimepicker({
@@ -316,6 +329,23 @@ $("#datetimepickerInit").on("dp.change", function (e) {
 });
 $("#datetimepickerEnd").on("dp.change", function (e) {
     $('#datetimepickerInit').data("DateTimePicker").maxDate(e.date);
+});
+
+//Reset Zoom
+$('#resetZoom').click(function () {
+
+    map.flyTo({
+
+        center: [-84.07836513337293, 9.933419690622571],
+        zoom: 8,
+        bearing: 0,
+        speed: 2.5,
+        curve: 1,
+
+        easing: function (t) {
+            return t;
+        }
+    });
 });
 
 
