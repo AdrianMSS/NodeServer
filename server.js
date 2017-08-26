@@ -55,7 +55,7 @@ app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos 
 app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos enviados y leidos por minuto
 
 //Demo Jonathan
-app.get('/gps/filter', zeus.getFilter); //Query para obtener los datos filtrados por fecha
+app.get('/zeus/filter', zeus.getFilter); //Query para obtener los datos filtrados por fecha
 
 //Insertar un nuevo punto
 app.post('/gps/today',

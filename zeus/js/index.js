@@ -4,12 +4,10 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v9',
     center: [-84.07836513337293, 9.933419690622571],
-    zoom: 12
+    zoom: 8
 });
 
-//Google Charts
-
-var chart;
+//
 var jsonDataCharts = { arrSpeed: [], arrFuel: [], arrAlt: [], arrRAM: [], arrRSSI: [], arrAll: [] };
 var gjPoints;
 
@@ -31,8 +29,6 @@ socket.on('updateShip', function (data) {
     gjPoints.features.push(data); //insertar el nuevo punto en el geojson de puntos
     map.getSource('scPoints').setData(gjPoints); //insertar el geojson de puntos actuializado al mapa
 
-         var x = (new Date()).getTime(), // current time
-            y = Math.round(Math.random() * 100);
             chart.series[0].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.vel)], true, false); //Speed
             chart.series[1].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
             chart.series[2].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
@@ -46,21 +42,30 @@ socket.on('updateShip', function (data) {
 //Filter Data
 $('#btnFilter').click(function () {
 
-     /* var dateInit = $("#dateInit").val(),
+      var dateInit = $("#dateInit").val(),
         dateEnd = $("#dateEnd").val();
 
-    $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/gps/filter", { dateInit, dateEnd })
+    $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
         .done(function (data) {
             console.log("json");
             console.log(data);
-            //drawMap(data)
+
+            //Actualizar el mapa
             map.getSource('scPoints').setData(data.gjPoints);
+
+            //Actualizar los graficos
+            jsonDataCharts.arrSpeed = [];
+            jsonDataCharts.arrFuel= [];
+            jsonDataCharts.arrAlt = [];
+            jsonDataCharts.arrRAM = [];
+            jsonDataCharts.arrRSSI = [];
+            generateDataCharts(data)
 
         })
         .fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
             console.log("Request Failed: " + err);
-        }); */
+        });
 });
 
 function drawMap(data) {
@@ -85,18 +90,15 @@ function drawMap(data) {
             }
         });
 
-        // Create a popup, but don't add it to the map yet.
         var popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false
         });
 
         map.on('mouseenter', 'points', function (e) {
-            // Change the cursor style as a UI indicator.
+
             map.getCanvas().style.cursor = 'pointer';
 
-            // Populate the popup and set its coordinates
-            // based on the feature found.
             popup.setLngLat(e.features[0].geometry.coordinates)
                 .setHTML(
                 "<strong>Date Remora: </strong>" + e.features[0].properties.dateRemora +
@@ -122,8 +124,6 @@ function drawMap(data) {
             $('#navStats').css('height', '100%');
             var point = new Date(e.features[0].properties.dateRemora).getTime();
             drawCharts(point);
-
-            //selectPointChart([{ row: "20,170,615,000,000" }]);
         });
 
 
@@ -142,6 +142,7 @@ function generateDataCharts(data) {
         jsonDataCharts.arrAlt.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.alt)]);
         jsonDataCharts.arrRAM.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RAM)]);
         jsonDataCharts.arrRSSI.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RSSI)]);
+        
     });
 
     drawCharts()
@@ -153,15 +154,7 @@ function drawCharts(point) {
         chart: {
 
             renderTo: 'chart_content',
-            zoomType: 'xy',
-            events: {
-                load: function () {
-    
-
-                    
-                }
-            }
-
+            zoomType: 'xy'
         },
         rangeSelector: {
             buttons: [{
@@ -195,7 +188,7 @@ function drawCharts(point) {
                 point: {
                     events: {
                         click: function () {
-                            alert('Category: ' + this.category + ', value: ' + this.y);
+                            //alert('Category: ' + this.category + ', value: ' + this.y);
                         }
                     }
                 }

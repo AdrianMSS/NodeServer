@@ -63,15 +63,19 @@ exports.getFilter = function (req, res) {
     var dInit = req.query.dateInit,
         dEnd = req.query.dateEnd;
 
-    db.collection('Zeus2').find({
+    db.collection('Zeus').find({
         "$and": [
-            { "dateRemora": { "$gte": new Date(dInit) } },
-            { "dateRemora": { "$lte": new Date(dEnd) } }]
+            { "dateServer": { "$gte": new Date(dInit) } },
+            { "dateServer": { "$lte": new Date(dEnd) } }]
     }).sort({ fecha: 1 }).toArray(function (err, doc) {
 
         if (err) { throw err; res.send(400, err); }
         else {
+            console.log("1")
+            console.log(doc);
             gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
+            console.log("2")
+            console.log(gjPoints);
             res.send(200, {gjPoints});
         }
     });
