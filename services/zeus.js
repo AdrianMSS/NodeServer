@@ -34,6 +34,10 @@ exports.getAllPoints = function () {
 
             if (err) reject(err);
             else {
+                //(Temporal) direccion head
+                doc.forEach(function (element, index) {
+                    element['Head'] =  parseInt(element['Head']) +180
+                })
                 resolve(doc)
             };
         });
@@ -71,11 +75,13 @@ exports.getFilter = function (req, res) {
 
         if (err) { throw err; res.send(400, err); }
         else {
-            console.log("1")
-            console.log(doc);
+
+            //(Temporal) direccion head
+            doc.forEach(function (element, index) {
+                element['Head'] =  parseInt(element['Head']) +180
+            })
+            
             gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
-            console.log("2")
-            console.log(gjPoints);
             res.send(200, {gjPoints});
         }
     });
