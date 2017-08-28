@@ -99,6 +99,8 @@ function drawMap(data) {
             "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
             "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
             "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
+            "<br><strong>Lat: </strong>" + e.features[0].geometry.coordinates[1] +
+            "<br><strong>Lon: </strong>" + e.features[0].geometry.coordinates[0] +
             "<br><strong>Δ Time: </strong> coming soon :v" +
             "<br><strong>Δ Distance: </strong> coming soon :v"
 
