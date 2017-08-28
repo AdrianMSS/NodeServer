@@ -25,9 +25,15 @@ socket.on('displayAllFeatures', function (data) {
 //UPDATE_SHIP
 socket.on('updateShip', function (data) {
 
+    //Actualizar los puntos
     gjPoints.features.push(data); //insertar el nuevo punto en el geojson de puntos
     map.getSource('scPoints').setData(gjPoints); //insertar el geojson de puntos actuializado al mapa
 
+    //Actualizar las lineas
+    gjLines.features[0].geometry.coordinates.push(data.geometry.coordinates); //insertar el nuevo punto en el geojson de puntos
+    map.getSource('scLines').setData(gjLines); //insertar el geojson de puntos actuializado al mapa
+
+    //Actualizar los graficos
     chart.series[0].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.vel)], true, false); //Speed
     chart.series[1].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
     chart.series[2].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
@@ -149,12 +155,12 @@ function drawMap(data) {
 function generateDataCharts(data) {
 
     _.map(data.gjPoints.features, function (e) {
-        jsonDataCharts.arrSpeed.push({ x: new Date(e.properties.dateServer).getTime(), y: parseInt(e.properties.vel), id: e.properties._id });
-        //jsonDataCharts.arrSpeed.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.vel)]);
-        jsonDataCharts.arrFuel.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.fuel)]);
-        jsonDataCharts.arrAlt.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.alt)]);
-        jsonDataCharts.arrRAM.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RAM)]);
-        jsonDataCharts.arrRSSI.push([new Date(e.properties.dateServer).getTime(), parseInt(e.properties.RSSI)]);
+        jsonDataCharts.arrSpeed.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.vel), id: e.properties._id });
+        //jsonDataCharts.arrSpeed.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.vel)]);
+        jsonDataCharts.arrFuel.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.fuel)]);
+        jsonDataCharts.arrAlt.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.alt)]);
+        jsonDataCharts.arrRAM.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.RAM)]);
+        jsonDataCharts.arrRSSI.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.RSSI)]);
 
     });
 

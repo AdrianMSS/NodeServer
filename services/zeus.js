@@ -31,7 +31,7 @@ Date.prototype.addHours = function (h) {
 exports.getAllPoints = function () {
 
     return new Promise(function (resolve, reject) {
-        db.collection('Zeus').find({ geo: { $exists: true } }).sort({ dateServer: 1 }).toArray(function (err, doc) {
+        db.collection('Zeus').find({ geo: { $exists: true } }).sort({ dateRemora: 1 }).toArray(function (err, doc) {
 
             if (err) reject(err);
             else {
@@ -95,8 +95,8 @@ exports.getFilter = function (req, res) {
 
     db.collection('Zeus').find({
         "$and": [
-            { "dateServer": { "$gte": new Date(dInit) } },
-            { "dateServer": { "$lte": new Date(dEnd) } }]
+            { "dateRemora": { "$gte": new Date(dInit) } },
+            { "dateRemora": { "$lte": new Date(dEnd) } }]
     }).sort({ fecha: 1 }).toArray(function (err, doc) {
 
         if (err) { throw err; res.send(400, err); }
