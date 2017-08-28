@@ -34,7 +34,7 @@ module.exports = function (io) {
     
         //Dar formato a la fecha de remora
         var fecha = "" + point.fecha;
-        var dateRemora = new Date(fecha.slice(0, 4), parseInt(fecha.slice(4, 6)) - 1, fecha.slice(6, 8), fecha.slice(8, 10), fecha.slice(10, 12));
+        var dateRemora = new Date(fecha.slice(0, 4), parseInt(fecha.slice(4, 6)) - 1, fecha.slice(6, 8), fecha.slice(8, 10), fecha.slice(10, 12)).addHours(-6);
         point["dateRemora"] = dateRemora;
     
         //Dar formato al geoJson
