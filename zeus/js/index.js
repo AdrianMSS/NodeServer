@@ -9,11 +9,12 @@ var map = new mapboxgl.Map({
 
 //
 var jsonDataCharts = { arrSpeed: [], arrFuel: [], arrAlt: [], arrRAM: [], arrRSSI: [], arrAll: [] };
-var gjPoints;
+var gjPoints, gjLines;
 
 
 //SocketIO
 var socket = io.connect('https://imaginexyz-genuinoday.herokuapp.com');
+//var socket = io.connect('http://localhost:3000');
 //ALL_FEATURES
 socket.on('displayAllFeatures', function (data) {
 
@@ -40,7 +41,7 @@ $('#btnFilter').click(function () {
     var dateInit = $("#dateInit").val(),
         dateEnd = $("#dateEnd").val();
 
-        $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
+    $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
         .done(function (data) {
 
             //Actualizar el mapa
@@ -63,68 +64,84 @@ $('#btnFilter').click(function () {
 
 function drawMap(data) {
 
+    /************POINTS*************/
+    console.log(data)
+    gjPoints = data.gjPoints;
+    map.addSource('scPoints', { type: 'geojson', data: gjPoints });
 
-    map.on('load', function () {
-
-        /************POINTS*************/
-        console.log(data.gjPoints)
-        gjPoints = data.gjPoints;
-        map.addSource('scPoints', { type: 'geojson', data: gjPoints });
-
-        map.addLayer({
-            "id": "points",
-            "type": "symbol",
-            "source": "scPoints",
-            "layout": {
-                "icon-image": "marker-15",
-                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-                "text-offset": [0, 0.6],
-                "text-anchor": "top",
-                "icon-rotate":({"type": "identity", "property": "Head"})
-            }
-        });
-
-        var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false
-        });
-
-        map.on('mouseenter', 'points', function (e) {
-
-            map.getCanvas().style.cursor = 'pointer';
-
-            popup.setLngLat(e.features[0].geometry.coordinates)
-                .setHTML(
-                "<strong>Date Remora: </strong>" + e.features[0].properties.dateRemora +
-                "<br><strong>Date Server: </strong>" + e.features[0].properties.dateServer +
-                "<br><strong>GPS View: </strong>" + e.features[0].properties.GPSView +
-                "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
-                "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
-                "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
-                "<br><strong>Δ Time: </strong> coming soon :v" +
-                "<br><strong>Δ Distance: </strong> coming soon :v"
-
-                )
-                .addTo(map);
-        });
-
-        map.on('mouseleave', 'points', function () {
-            map.getCanvas().style.cursor = '';
-            popup.remove();
-        });
-
-        //Open charts
-        map.on('click', 'points', function (e) {
-            $('#navStats').css('height', '100%');
-            var point = new Date(e.features[0].properties.dateRemora).getTime();
-            drawCharts(point);
-        });
-
-
-        /************LINESTRINGS*************/
-        /************POLYGONS*************/
-
+    map.addLayer({
+        "id": "layrPoints",
+        "type": "symbol",
+        "source": "scPoints",
+        "layout": {
+            "icon-image": "marker-15",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 0.6],
+            "text-anchor": "top",
+            "icon-rotate": ({ "type": "identity", "property": "Head" })
+        }
     });
+
+    var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    });
+
+    map.on('mouseenter', 'layrPoints', function (e) {
+
+        map.getCanvas().style.cursor = 'pointer';
+
+        popup.setLngLat(e.features[0].geometry.coordinates)
+            .setHTML(
+            "<strong>Date Remora: </strong>" + e.features[0].properties.dateRemora +
+            "<br><strong>Date Server: </strong>" + e.features[0].properties.dateServer +
+            "<br><strong>GPS View: </strong>" + e.features[0].properties.GPSView +
+            "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
+            "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
+            "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
+            "<br><strong>Δ Time: </strong> coming soon :v" +
+            "<br><strong>Δ Distance: </strong> coming soon :v"
+
+            )
+            .addTo(map);
+    });
+
+    map.on('mouseleave', 'layrPoints', function () {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+    });
+
+    //Open charts
+    map.on('click', 'layrPoints', function (e) {
+        $('#navStats').css('height', '100%');
+        var point = new Date(e.features[0].properties.dateRemora).getTime();
+        drawCharts(point);
+    });
+
+
+    /************LINESTRINGS*************/
+
+    gjLines = data.gjLines;
+    map.addSource('scLines', { type: 'geojson', data: gjLines });
+
+    map.addLayer({
+        "id": "layrLines",
+        "type": "line",
+        "source": "scLines",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#888",
+            "line-width": 2
+        }
+    });
+
+    map.setLayoutProperty('layrLines', 'visibility', 'none');
+
+    /************POLYGONS*************/
+
 }
 
 function generateDataCharts(data) {
@@ -177,19 +194,19 @@ function drawCharts(point) {
         },
         plotOptions: {
             series: {
-                
-                turboThreshold:0,
+
+                turboThreshold: 0,
                 allowPointSelect: true,
                 cursor: 'pointer',
                 point: {
                     events: {
                         click: function () {
-                            
-                             var id = this.id;
 
-                             console.log('id: '+id)
+                            var id = this.id;
+
+                            console.log('id: ' + id)
                             _.forEach(gjPoints.features, function (e) {
-                                   
+
                                 if (e.properties._id == id) {
 
                                     map.flyTo({
@@ -209,14 +226,14 @@ function drawCharts(point) {
                                     return false;
                                 }
                             });
- 
+
                         }
                     }
                 }
             }
         },
         tooltip: {
-           valueDecimals: 2
+            valueDecimals: 2
         },
         yAxis: [
             //Speed
@@ -352,4 +369,15 @@ $('#resetZoom').click(function () {
     });
 });
 
+//HideLines
+$('#hideLines').click(function () {
+
+    var visibility = map.getLayoutProperty('layrLines', 'visibility');
+
+    if (visibility === 'visible') {
+        map.setLayoutProperty('layrLines', 'visibility', 'none');
+    } else {
+        map.setLayoutProperty('layrLines', 'visibility', 'visible');
+    }
+});
 

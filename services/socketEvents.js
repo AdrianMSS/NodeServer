@@ -1,4 +1,5 @@
-var GeoJSON = require('geojson');
+var GeoJSON = require('geojson'); //Modulo para generar geojson
+var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
 var _ = require('lodash');
 var zeus = require('./zeus');
 var sock;
@@ -17,7 +18,7 @@ module.exports = function (io) {
 
       //Generar los geojson 
       var gjPoints = GeoJSON.parse(data[0], { GeoJSON: 'geo' });
-      var gjLines = GeoJSON.parse(data[1], { Point: ['line.lat', 'line.lon'] });
+      var gjLines = GeoJSON.parse(data[1], { 'LineString': 'line' });
 
       sock.emit('displayAllFeatures', { gjPoints, gjLines });
     });

@@ -3,20 +3,23 @@
   "version": "0.2.0",
   "description": "IoT Server with NodeJs and MongoDB",
   "main": "server.js",
-  "engines" : { 
-      "node" : "4.8.4",
-      "npm" : "1.4.23"
+  "engines": {
+    "node": "4.8.4",
+    "npm": "1.4.23"
   },
-  "authors": [ "ImagineXYZ - Adrián Sánchez"],
+  "authors": [
+    "ImagineXYZ - Adrián Sánchez"
+  ],
   "dependencies": {
-    "express": "3.x",
-    "cookie-parser": "*",
+    "@turf/turf": "^4.6.1",
     "body-parser": "*",
-    "mongodb": "*",
-    "url": "*",
+    "cookie-parser": "*",
     "cors": "*",
-    "socket.io": "^2.0.3",
+    "express": "3.x",
     "geojson": "^0.5.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "mongodb": "*",
+    "socket.io": "^2.0.3",
+    "url": "*"
   }
 }

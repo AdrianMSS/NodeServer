@@ -1,6 +1,7 @@
 
 var mongo = require('mongodb'); //Biblioteca para comunicarse con la base de datos MongoDB
 var GeoJSON = require('geojson'); //Modulo para parsear de un json a un geoJson
+var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
 
 //Puerto de conexión con la base de datos (no es el mismo de escucha del servidor)
 var uristring =
@@ -37,6 +38,28 @@ exports.getAllPoints = function () {
                 //(Temporal) direccion head
                 doc.forEach(function (element, index) {
                     element['Head'] =  parseInt(element['Head']) +180
+/* 
+                    var dc = {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                          type: 'LineString',
+                          coordinates: [
+                            [-77.031669, 38.878605],
+                            [-77.029609, 38.881946],
+                            [-77.020339, 38.884084],
+                            [-77.025661, 38.885821],
+                            [-77.021884, 38.889563],
+                            [-77.019824, 38.892368]
+                          ]
+                        }
+                      };
+                      
+                      var length = turf.lineDistance(dc, 'miles');
+                
+                      console.log('demo44')
+                      console.log(length) */
+
                 })
                 resolve(doc)
             };
@@ -49,15 +72,18 @@ exports.getAllLines = function () {
     return new Promise(function (resolve, reject) {
         db.collection('Zeus').aggregate([{
             $group: {
-                _id: "$ID",
-                line: { $push: { lat: "$lat", lon: "$lon" } },
+              _id: "$ID",
+              line: {
+                $push: "$geo.coordinates"
+              }
             }
+          }], function (err, doc) {
 
-        }], function (err, doc) {
-
-            if (err) reject(err);
-            else { resolve(doc) };
-        });
+            if (err) { throw err; res.send(400, err); }
+            else {
+                resolve(doc)
+            }
+          });
     });
 }
 
