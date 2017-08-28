@@ -1,5 +1,5 @@
 var GeoJSON = require('geojson'); //Modulo para generar geojson
-var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
+//var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
 var _ = require('lodash');
 var zeus = require('./zeus');
 var sock;

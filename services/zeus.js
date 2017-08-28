@@ -1,7 +1,7 @@
 
 var mongo = require('mongodb'); //Biblioteca para comunicarse con la base de datos MongoDB
 var GeoJSON = require('geojson'); //Modulo para parsear de un json a un geoJson
-var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
+//var turf = require('@turf/turf'); //Modulo para medir distancias a partir de coordenadas
 
 //Puerto de conexión con la base de datos (no es el mismo de escucha del servidor)
 var uristring =
