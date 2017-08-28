@@ -34,11 +34,11 @@ socket.on('updateShip', function (data) {
     map.getSource('scLines').setData(gjLines); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar los graficos
-    chart.series[0].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.vel)], true, false); //Speed
-    chart.series[1].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
-    chart.series[2].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
-    chart.series[3].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.alt)], true, false); //Height
-    chart.series[4].addPoint([new Date(data.properties.dateServer).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
+    chart.series[0].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.vel)], true, false); //Speed
+    chart.series[1].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
+    chart.series[2].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
+    chart.series[3].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.alt)], true, false); //Height
+    chart.series[4].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
 });
 
 //Filter Data
