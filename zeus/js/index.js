@@ -48,6 +48,7 @@ $('#btnFilter').click(function () {
         dateEnd = $("#dateEnd").val();
 
     $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
+    //$.getJSON("http://localhost:3000/zeus/filter", { dateInit, dateEnd })
         .done(function (data) {
 
             //Actualizar el mapa
@@ -95,20 +96,24 @@ function drawMap(data) {
 
     map.on('mouseenter', 'layrPoints', function (e) {
 
-        map.getCanvas().style.cursor = 'pointer';
+        var dRemora =e.features[0].properties.dateRemora,
+        dServer = e.features[0].properties.dateServer;
 
+        map.getCanvas().style.cursor = 'pointer';
         popup.setLngLat(e.features[0].geometry.coordinates)
             .setHTML(
-            "<strong>Date Remora: </strong>" + e.features[0].properties.dateRemora +
-            "<br><strong>Date Server: </strong>" + e.features[0].properties.dateServer +
+            "<strong>Date Remora: </strong>" + dRemora.slice(8,10)+"/"+dRemora.slice(5,7)+
+            "/"+dRemora.slice(0,4)+" - "+dRemora.slice(11,16)+
+            "<br><strong>Date Server: </strong>" + dServer.slice(8,10)+"/"+dServer.slice(5,7)+
+            "/"+dServer.slice(0,4)+" - "+dServer.slice(11,16)+
             "<br><strong>GPS View: </strong>" + e.features[0].properties.GPSView +
             "<br><strong>GPS Used: </strong>" + e.features[0].properties.GNSS_used +
             "<br><strong>Motor: </strong>" + e.features[0].properties.Motor +
             "<br><strong>Qt: </strong>" + e.features[0].properties.QuadTree +
-            "<br><strong>Lat: </strong>" + e.features[0].geometry.coordinates[1] +
-            "<br><strong>Lon: </strong>" + e.features[0].geometry.coordinates[0] +
-            "<br><strong>Δ Time: </strong> coming soon :v" +
-            "<br><strong>Δ Distance: </strong> coming soon :v"
+            "<br><strong>Lat: </strong>" + e.features[0].geometry.coordinates[1].toFixed(6) +
+            "<br><strong>Lon: </strong>" + e.features[0].geometry.coordinates[0].toFixed(6) +
+            "<br><strong>Δ Time: </strong>" +e.features[0].properties.deltaTime+" min"+
+            "<br><strong>Δ Distance: </strong>"+e.features[0].properties.deltaDistance.toFixed(2)+" km"
 
             )
             .addTo(map);
