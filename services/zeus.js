@@ -87,10 +87,9 @@ exports.getAllLines = function () {
 }
 
 exports.getFilter = function (req, res) {
-    console.log("demo filter")
-    console.log(req.query);
+
     var dInit = req.query.dateInit,
-        dEnd = req.query.dateEnd;
+        dEnd = (req.query.dateEnd) ? req.query.dateEnd : new Date();
 
     db.collection('Zeus').find({
         "$and": [
@@ -123,7 +122,7 @@ exports.getFilter = function (req, res) {
 
                 })
 
-            var gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
+            let gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
             res.send(200, { gjPoints });
         }
     });
