@@ -8,16 +8,17 @@ var uristring =
     process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||
     'mongodb://localhost/Remora';
+    //'mongodb://heroku_v37rd9bf:lsd8ccnsrsn5skoiv1rpncad77@ds011890.mlab.com:11890/heroku_v37rd9bf';
 
 
 //Conexión con la base de datos
 mongo.MongoClient.connect(uristring, function (err, database) {
     if (!err) {
         db = database; //Instancia de la base de datos
-        console.log('Connected to the "Remora" database');
+        console.log('Connected to the "Zeus" database');
     }
     else {
-        console.log(404, 'Error Connecting to the "Remora" database');
+        console.log(404, 'Error Connecting to the "Zeus" database');
     }
 });
 
@@ -122,7 +123,7 @@ exports.getFilter = function (req, res) {
 
                 })
 
-            gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
+            var gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
             res.send(200, { gjPoints });
         }
     });
