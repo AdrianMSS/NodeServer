@@ -30,7 +30,11 @@ socket.on('updateShip', function (data) {
     map.getSource('scPoints').setData(gjPoints); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar las lineas
-    gjLines.features[0].geometry.coordinates.push(data.geometry.coordinates); //insertar el nuevo punto en el geojson de puntos
+    var match = _.find(gjLines.features, function (geojson) { return geojson.properties._id == data.properties.ID });
+    if (match) {
+        var index = _.indexOf(gjLines.features, match);
+        gjLines.features[index].geometry.coordinates.push(data.geometry.coordinates);
+    } 
     map.getSource('scLines').setData(gjLines); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar los graficos
@@ -59,9 +63,17 @@ $('#btnFilter').click(function () {
         $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
         //$.getJSON("http://localhost:3000/zeus/filter", { dateInit, dateEnd })
             .done(function (data) {
+                
+                console.log(data);
 
-                //Actualizar el mapa
-                map.getSource('scPoints').setData(data.gjPoints);
+                gjLines = data.gjLines;
+                gjPoints = data.gjPoints;
+
+                //Actualizar los puntos del mapa 
+                map.getSource('scPoints').setData(gjPoints);
+
+                //Actualizar las lines del mapa 
+                map.getSource('scLines').setData(gjLines);
 
                 //Actualizar los graficos
                 jsonDataCharts.arrSpeed = [];
@@ -123,7 +135,7 @@ function drawMap(data) {
             "<br><strong>Lat: </strong>" + e.features[0].geometry.coordinates[1].toFixed(6) +
             "<br><strong>Lon: </strong>" + e.features[0].geometry.coordinates[0].toFixed(6) +
             "<br><strong>Δ Time: </strong>" + e.features[0].properties.deltaTime + " min" +
-            "<br><strong>Δ Distance: </strong>" + e.features[0].properties.deltaDistance.toFixed(2) + " km"
+            "<br><strong>Δ Distance: </strong>" + e.features[0].properties.deltaDistance.toFixed(3) + " km"
 
             )
             .addTo(map);

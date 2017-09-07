@@ -39,21 +39,21 @@ exports.getAllPoints = function () {
 
                 var previousPoint, distance;
                 doc.forEach(function (element, index) {
-                    
-                    
+
+
 
                     if (index == 0) previousPoint = element
-                    
+
                     //Tiempo trancurrido entre punto y punto
                     let dateInit = new Date(previousPoint.dateRemora).getTime();
                     let dateEnd = new Date(element.dateRemora).getTime();
-                    let diffMin = (dateEnd - dateInit) / (1000*60) ;
+                    let diffMin = (dateEnd - dateInit) / (1000 * 60);
 
                     //Distancia entre punto y punto 
                     let from = turf.point(previousPoint.geo.coordinates);
                     let to = turf.point(element.geo.coordinates);
                     distance = turf.distance(from, to);
-                    
+
                     element['deltaDistance'] = distance;
                     element['deltaTime'] = diffMin;
                     element['Head'] = parseInt(element['Head']) + 180
@@ -91,49 +91,95 @@ exports.getFilter = function (req, res) {
     var dInit = req.query.dateInit,
         dEnd = (req.query.dateEnd) ? req.query.dateEnd : new Date();
 
-    db.collection('Zeus').find({
-        "$and": [
-            { "dateRemora": { "$gte": new Date(dInit) } },
-            { "dateRemora": { "$lte": new Date(dEnd) } }]
-    }).sort({ dateRemora: 1 }).toArray(function (err, doc) {
+    Promise.all([filterPoints(dInit, dEnd), filterLines(dInit, dEnd)]).then(function (data) {
 
-        if (err) { throw err; res.send(400, err); }
-        else {
+        let gjPoints = GeoJSON.parse(data[0], { GeoJSON: 'geo' });
+        var gjLines = GeoJSON.parse(data[1], { 'LineString': 'line' });
 
-            var previousPoint, distance;
+        res.send(200, { gjPoints, gjLines });
+    });
+
+
+}
+
+var filterPoints = (dInit, dEnd) => {
+
+    return new Promise(function (resolve, reject) {
+
+        db.collection('Zeus').find({
+            "$and": [
+                { "dateRemora": { "$gte": new Date(dInit) } },
+                { "dateRemora": { "$lte": new Date(dEnd) } }]
+        }).sort({ dateRemora: 1 }).toArray(function (err, doc) {
+
+            if (err) { throw err; res.send(400, err); }
+            else {
+
+                var previousPoint, distance;
                 doc.forEach(function (element, index) {
-                    
+
                     if (index == 0) previousPoint = element
-                    
+
                     //Tiempo trancurrido entre punto y punto
                     let dateInit = new Date(previousPoint.dateRemora).getTime();
                     let dateEnd = new Date(element.dateRemora).getTime();
-                    let diffMin = (dateEnd - dateInit) / (1000*60) ;
+                    let diffMin = (dateEnd - dateInit) / (1000 * 60);
 
                     //Distancia entre punto y punto 
                     let from = turf.point(previousPoint.geo.coordinates);
                     let to = turf.point(element.geo.coordinates);
                     distance = turf.distance(from, to);
-                    
+
                     element['deltaDistance'] = distance;
                     element['deltaTime'] = diffMin;
                     element['Head'] = parseInt(element['Head']) + 180
                     previousPoint = element
 
                 })
+                resolve(doc)
+            }
+        });
 
-            let gjPoints = GeoJSON.parse(doc, { GeoJSON: 'geo' });
-            res.send(200, { gjPoints });
-        }
+
     });
 }
+
+var filterLines = (dInit, dEnd) => {
+
+    return new Promise(function (resolve, reject) {
+
+        db.collection('Zeus').aggregate([
+            {
+                $match: {
+                    "$and": [
+                        { "dateRemora": { "$gte": new Date(dInit) } },
+                        { "dateRemora": { "$lte": new Date(dEnd) } }]
+                }
+            },
+            {
+                $group: {
+                    _id: "$ID",
+                    line: {
+                        $push: "$geo.coordinates"
+                    }
+                }
+            }
+        ],
+            function (err, doc) {
+
+                if (err) { throw err; res.send(400, err); }
+                else {
+                    resolve(doc)
+                }
+            });
+    });
+}
+
 
 
 exports.insertNewPoint = function (req, res) {
 
     var pos = req.body;
-    //console.log(pos)
-    //Insertar en DB
     db.collection('Zeus').insert(pos, function (err, doc) {
         if (err) { throw err; res.send(400, err); }
         else {
