@@ -7,7 +7,7 @@ var data = [];
 var monument = [-84, 10];
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v9',
+    style: 'mapbox://styles/mapbox/dark-v9',
     center: [-84.0765528406493,9.933541429759131],
     zoom: 7
 });
