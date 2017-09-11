@@ -1,3 +1,6 @@
+var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
+//var HOST = 'http://localhost:3000';
+
 //Map 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamdyYW5hZG9zIiwiYSI6ImNqNWNzMjVnMjAxc2MzMm51Yjk2ZG9oY3YifQ.6XIiaaLKqPoSxluayRcsdg';
 var map = new mapboxgl.Map({
@@ -9,12 +12,12 @@ var map = new mapboxgl.Map({
 
 //
 var jsonDataCharts = { arrSpeed: [], arrFuel: [], arrAlt: [], arrRAM: [], arrRSSI: [], arrAll: [] };
-var gjPoints, gjLines;
+var gjPoints, gjLines, gjPolygons;
 
 
 //SocketIO
-var socket = io.connect('https://imaginexyz-genuinoday.herokuapp.com');
-//var socket = io.connect('http://localhost:3000');
+var socket = io.connect(HOST);
+
 //ALL_FEATURES
 socket.on('displayAllFeatures', function (data) {
 
@@ -34,7 +37,7 @@ socket.on('updateShip', function (data) {
     if (match) {
         var index = _.indexOf(gjLines.features, match);
         gjLines.features[index].geometry.coordinates.push(data.geometry.coordinates);
-    } 
+    }
     map.getSource('scLines').setData(gjLines); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar los graficos
@@ -43,6 +46,16 @@ socket.on('updateShip', function (data) {
     chart.series[2].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
     chart.series[3].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.alt)], true, false); //Height
     chart.series[4].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
+});
+
+//UPDATE_GEOFENCING
+socket.on('updateGeofences', function (data) {
+
+    data.features.forEach(function (feature, index) {
+
+        gjPolygons.features.push(feature);
+        map.getSource('scPolygons').setData(gjPolygons);
+    });
 });
 
 //Filter Data
@@ -60,10 +73,9 @@ $('#btnFilter').click(function () {
         $("#errDateInit").html('Indique una fecha de inicio.');
     }
     else {
-        $.getJSON("https://imaginexyz-genuinoday.herokuapp.com/zeus/filter", { dateInit, dateEnd })
-        //$.getJSON("http://localhost:3000/zeus/filter", { dateInit, dateEnd })
+        $.getJSON(HOST + "/zeus/filter", { dateInit, dateEnd })
             .done(function (data) {
-                
+
                 console.log(data);
 
                 gjLines = data.gjLines;
@@ -176,6 +188,20 @@ function drawMap(data) {
     map.setLayoutProperty('layrLines', 'visibility', 'none');
 
     /************POLYGONS*************/
+
+    gjPolygons = data.gjPolygons;
+    map.addSource('scPolygons', { type: 'geojson', data: gjPolygons });
+
+    map.addLayer({
+        'id': 'maine',
+        'type': 'fill',
+        'source': 'scPolygons',
+        'layout': {},
+        'paint': {
+            'fill-color': '#088',
+            'fill-opacity': 0.8
+        }
+    });
 
 }
 

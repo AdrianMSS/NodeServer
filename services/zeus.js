@@ -8,7 +8,7 @@ var uristring =
     process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||
     'mongodb://localhost/Remora';
-    //'mongodb://heroku_v37rd9bf:lsd8ccnsrsn5skoiv1rpncad77@ds011890.mlab.com:11890/heroku_v37rd9bf';
+//'mongodb://heroku_v37rd9bf:lsd8ccnsrsn5skoiv1rpncad77@ds011890.mlab.com:11890/heroku_v37rd9bf';
 
 
 //Conexión con la base de datos
@@ -82,6 +82,17 @@ exports.getAllLines = function () {
             else {
                 resolve(doc)
             }
+        });
+    });
+}
+
+exports.getAllPolygons = function () {
+
+    return new Promise((resolve, reject) => {
+
+        db.collection('geofence').find({ geo: { $exists: true } }).toArray(function (err, doc) {
+
+            err ? reject(err) : resolve(doc)
         });
     });
 }
@@ -175,7 +186,34 @@ var filterLines = (dInit, dEnd) => {
     });
 }
 
+exports.insertNewPolygon = (data) => {
 
+    return new Promise((resolve, reject) => {
+
+        var boolErr;
+        //Recorrer todas las features para almacenar los poligonos uno por uno
+        data.features.forEach(function (feature) {
+
+            //llenar la entidad para agregar el nuevo poligono a la db
+            var geofence = {
+                description: 'zona protegida',
+                geo: feature.geometry
+            }
+
+            //Guardar el nuevo poligono
+            db.collection('geofence').insert(geofence, function (err, doc) {
+                if (err) { throw err; boolErr = true }
+                else console.log('success');
+
+            });
+        })
+
+        boolErr == true ? reject(Error("Err to save")) : resolve("Success")
+    }
+    );
+
+
+}
 
 exports.insertNewPoint = function (req, res) {
 

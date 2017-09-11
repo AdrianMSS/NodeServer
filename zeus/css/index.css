@@ -71,12 +71,16 @@ body {
     position: relative;
 }
 
-#dash-options{
-  margin: 1%;
-  float: right
-}
+#dash-rigth{
+    margin: 1%;
+    float: right
+  }
 
-#dash-options *{
+  #dash-left{
+    margin: 1%;
+  }
+
+  #dash-rigth *, #dash-left * {
     margin-bottom: 9%;
 
   }

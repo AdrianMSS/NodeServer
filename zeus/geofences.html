@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Imagine XYZ-RemoraGPS</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- Mapbox -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../zeus/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Index -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+    <div id='map'></div>
+
+    <div class="content">
+
+        <div id="dash-left">
+            <input type="button" value="SaveGeofences" id="saveGeofences" class="btn btn-default">
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../zeus/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../zeus/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Mapbox -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js"></script>
+    <!-- SocketIO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Lodash -->
+    <script src="../zeus/bower_components/lodash/dist/lodash.min.js"></script>
+    <!-- Geofences -->
+    <script src="js/geofences.js"></script>
+</body>
+
+</html>
