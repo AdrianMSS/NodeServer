@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Imagine XYZ-RemoraGPS</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- Mapbox -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../zeus/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Index -->
+    <link rel="stylesheet" href="css/index.css">
+
+    <style type='text/css'>
+        #info {
+            display: block;
+            position: relative;
+            margin: 0px auto;
+            width: 25%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+            margin-top: 1%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id='map'></div>
+    <pre id='info'></pre>
+
+    <!-- jQuery -->
+    <script src="../zeus/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../zeus/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Mapbox -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js"></script>
+    <!-- SocketIO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- geojson -->
+    <script src="../zeus/bower_components/geojson.min.js"></script>
+    <!-- Geofences -->
+    <script>
+        var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
+        //var HOST = 'http://localhost:3000';
+
+        //Map 
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamdyYW5hZG9zIiwiYSI6ImNqNWNzMjVnMjAxc2MzMm51Yjk2ZG9oY3YifQ.6XIiaaLKqPoSxluayRcsdg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v9',
+            center: [-84.07836513337293, 9.933419690622571],
+            zoom: 11
+        });
+
+        map.on('mousemove', function (e) {
+            document.getElementById('info').innerHTML =
+                JSON.stringify(e.lngLat.lat) + ', ' +
+                JSON.stringify(e.lngLat.lng);
+        });
+
+        //
+        var points = [], gjPolygons;
+
+
+        //SocketIO
+        var socket = io.connect(HOST);
+
+        //ALL_FEATURES
+        socket.on('displayAllFeatures', function (data) {
+
+            /************POLYGONS*************/
+
+            gjPolygons = data.gjPolygons;
+            map.addSource('scPolygons', { type: 'geojson', data: gjPolygons });
+
+            map.addLayer({
+                'id': 'maine',
+                'type': 'fill',
+                'source': 'scPolygons',
+                'layout': {},
+                'paint': {
+                    'fill-color': '#088',
+                    'fill-opacity': 0.8
+                }
+            });
+
+            gjPolygons.features.forEach(function (feature, index) {
+
+                feature.geometry.coordinates[0].forEach(function (coor, index) {
+
+                    points.push(
+                        {
+                            description: '',
+                            lat: coor[1],
+                            lng: coor[0]
+                        }
+                    );
+
+                });
+            });
+
+            /************POINTS*************/
+
+            var gjPoints = GeoJSON.parse(points, { Point: ['lat', 'lng'] });
+
+            map.addSource('scPoints', { type: 'geojson', data: gjPoints });
+
+            map.addLayer({
+                "id": "layrPoints",
+                "type": "symbol",
+                "source": "scPoints",
+                "layout": {
+                    "icon-image": "marker-15",
+                    "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                    "text-offset": [0, 0.6],
+                    "text-anchor": "top",
+                    "icon-rotate": ({ "type": "identity", "property": "Head" })
+                }
+            });
+
+            var popup = new mapboxgl.Popup();
+
+            map.on('mouseenter', 'layrPoints', function (e) {
+
+                map.getCanvas().style.cursor = 'pointer';
+                popup.setLngLat(e.features[0].geometry.coordinates)
+                    .setHTML(
+                    "<strong> [LAT, LNG]: </strong><br>[" + e.features[0].geometry.coordinates[1] + ", " + e.features[0].geometry.coordinates[0] + "]"
+                    )
+                    .addTo(map);
+            });
+
+            map.on('mouseleave', 'layrPoints', function () {
+                map.getCanvas().style.cursor = '';
+                //popup.remove();
+            });
+
+        });
+    </script>
+</body>
+
+</html>

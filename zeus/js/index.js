@@ -203,6 +203,11 @@ function drawMap(data) {
         }
     });
 
+   /*  var p = []
+    gjPolygons.features[3].geometry.coordinates.forEach(function(e, i){
+        p.push(e); 
+    });
+    console.log(JSON.stringify(p)); */
 }
 
 function generateDataCharts(data) {
