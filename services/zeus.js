@@ -225,3 +225,18 @@ exports.insertNewPoint = function (req, res) {
         }
     });
 }
+
+exports.deleteGeofence = function (req, res) {
+    
+        console.log(req.body.id)
+        var id = req.body.id;
+        db.collection('geofence').findAndRemove({_id: new mongo.ObjectID(id)},function(err, result) {
+            if(err) {
+                throw err;
+                res.send(400, err);
+            }
+            else{
+                res.send(200, result);
+            }  
+        }); 
+    }

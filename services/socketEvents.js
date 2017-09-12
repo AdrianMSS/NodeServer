@@ -15,7 +15,20 @@ module.exports = function (io) {
       zeus.insertNewPolygon(data)
         .then(function (result) {
         
-          socket.broadcast.emit('updateGeofences', data);
+          socket.emit('updateGeofences', data);
+        }, function (err) {
+          console.log(err);
+        });
+    });
+
+    //Envia las geofences existentes 
+    socket.on('getGeofences', function (data) {
+
+      zeus.getAllPolygons()
+        .then(function (geofences) {
+        
+          var gjPolygons = GeoJSON.parse(geofences, { GeoJSON: 'geo' });
+          socket.emit('sendGeofences', gjPolygons);
         }, function (err) {
           console.log(err);
         });

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset='utf-8' />
-    <title>Imagine XYZ-RemoraGPS</title>
+    <title>Geofences</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!-- Mapbox -->
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
@@ -21,7 +21,20 @@
     <div class="content">
 
         <div id="dash-left">
-            <input type="button" value="SaveGeofences" id="saveGeofencess" class="btn btn-default">
+            <button class="btn btn-default" id="openNav"><span class="glyphicon glyphicon-th-list"></span></button>
+        </div>
+    </div>
+
+    <div id="navGeofences" class="overlay-left">
+        <a href="javascript:void(0)" class="closebtn" id="closeNav">&times;</a>
+        <div class="overlay-left-content">
+
+            <div class="table-responsive table-geofence">
+                <table class="table table-hover" id="table-geofences">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -38,6 +51,19 @@
     <script src="../zeus/bower_components/lodash/dist/lodash.min.js"></script>
     <!-- Geofences -->
     <script src="js/geofences.js"></script>
+
+    <script>
+        $('#openNav').click(function () {
+            $('#navGeofences').css('width', '30%');
+            $(this).hide();
+
+        });
+
+        $('#closeNav').click(function () {
+            $('#navGeofences').css('width', '0%');
+            $('#openNav').show();
+        });
+    </script>
 </body>
 
 </html>
