@@ -190,29 +190,26 @@ exports.insertNewPolygon = (data) => {
 
     return new Promise((resolve, reject) => {
 
-        var boolErr;
+        var arrGeofences = [];
         //Recorrer todas las features para almacenar los poligonos uno por uno
         data.features.forEach(function (feature) {
 
-            //llenar la entidad para agregar el nuevo poligono a la db
-            var geofence = {
+            arrGeofences.push({
                 description: 'zona protegida',
                 geo: feature.geometry
-            }
-
-            //Guardar el nuevo poligono
-            db.collection('geofence').insert(geofence, function (err, doc) {
-                if (err) { throw err; boolErr = true }
-                else console.log('success');
-
-            });
+            })
         })
 
-        boolErr == true ? reject(Error("Err to save")) : resolve("Success")
+        //Guardar las geofences
+        db.collection('geofence').insert(arrGeofences, function (err, doc) {
+            if (err) {
+                throw err;
+                reject(Error("Err to save"))
+            }
+            else resolve(doc)
+        });
     }
     );
-
-
 }
 
 exports.insertNewPoint = function (req, res) {
@@ -227,16 +224,16 @@ exports.insertNewPoint = function (req, res) {
 }
 
 exports.deleteGeofence = function (req, res) {
-    
-        console.log(req.body.id)
-        var id = req.body.id;
-        db.collection('geofence').findAndRemove({_id: new mongo.ObjectID(id)},function(err, result) {
-            if(err) {
-                throw err;
-                res.send(400, err);
-            }
-            else{
-                res.send(200, result);
-            }  
-        }); 
-    }
+
+    console.log(req.body.id)
+    var id = req.body.id;
+    db.collection('geofence').findAndRemove({ _id: new mongo.ObjectID(id) }, function (err, result) {
+        if (err) {
+            throw err;
+            res.send(400, err);
+        }
+        else {
+            res.send(200, result);
+        }
+    });
+}

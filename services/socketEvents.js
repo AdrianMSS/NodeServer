@@ -11,12 +11,13 @@ module.exports = function (io) {
 
     //Recibe un nuevo poligino para almacenarlo
     socket.on('saveGeofences', function (data) {
-      console.log(data);
+      
       zeus.insertNewPolygon(data)
         .then(function (result) {
-
-          socket.emit('updateGeofences', data);
-          socket.broadcast.emit('updateGeofences', data);
+          
+          var gjPolygons = GeoJSON.parse(result.ops, { GeoJSON: 'geo' });
+          socket.emit('updateGeofences', gjPolygons);
+          socket.broadcast.emit('updateGeofences', gjPolygons);
         }, function (err) {
           console.log(err);
         });
