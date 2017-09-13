@@ -56,7 +56,7 @@ app.get('/imaginexyz/posts', database.getPosts); //Query para obtener los datos 
 
 //Demo Jonathan
 app.get('/zeus/filter', zeus.getFilter); //Query para obtener los datos filtrados por fecha
-app.delete('/geofence', zeus.deleteGeofence); //Eliminar una geofence especifica
+app.delete('/geofence', socketEvents.deleteGeofence, zeus.deleteGeofence); //Eliminar una geofence especifica
 
 //Insertar un nuevo punto
 app.post('/gps/today',

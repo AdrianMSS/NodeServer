@@ -7,7 +7,7 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v9',
     center: [-84.07836513337293, 9.933419690622571],
-    zoom: 8
+    zoom: 7
 });
 
 //
@@ -51,10 +51,26 @@ socket.on('updateShip', function (data) {
 //UPDATE_GEOFENCING
 socket.on('updateGeofences', function (data) {
 
+    console.log('uppp')
     data.features.forEach(function (feature, index) {
 
         gjPolygons.features.push(feature);
         map.getSource('scPolygons').setData(gjPolygons);
+    });
+});
+
+//DELETE_GEOFENCING
+socket.on('deletedGeofence', function (data) {
+
+    console.log(data.id)
+    var id= data.id;
+    gjPolygons.features.forEach(function (e, index) {
+
+        if (id == e.properties._id) {
+            gjPolygons.features.splice(index, 1);
+            map.getSource('scPolygons').setData(gjPolygons);
+            return false;
+        }
     });
 });
 
@@ -203,11 +219,11 @@ function drawMap(data) {
         }
     });
 
-   /*  var p = []
-    gjPolygons.features[3].geometry.coordinates.forEach(function(e, i){
-        p.push(e); 
-    });
-    console.log(JSON.stringify(p)); */
+    /*  var p = []
+     gjPolygons.features[3].geometry.coordinates.forEach(function(e, i){
+         p.push(e); 
+     });
+     console.log(JSON.stringify(p)); */
 }
 
 function generateDataCharts(data) {

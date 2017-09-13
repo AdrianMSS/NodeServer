@@ -14,8 +14,9 @@ module.exports = function (io) {
       console.log(data);
       zeus.insertNewPolygon(data)
         .then(function (result) {
-        
+
           socket.emit('updateGeofences', data);
+          socket.broadcast.emit('updateGeofences', data);
         }, function (err) {
           console.log(err);
         });
@@ -26,7 +27,7 @@ module.exports = function (io) {
 
       zeus.getAllPolygons()
         .then(function (geofences) {
-        
+
           var gjPolygons = GeoJSON.parse(geofences, { GeoJSON: 'geo' });
           socket.emit('sendGeofences', gjPolygons);
         }, function (err) {
@@ -77,6 +78,12 @@ module.exports = function (io) {
 
     next();
   }
+
+  module.exports.deleteGeofence = function (req, res, next) {
+
+        sock.emit('deletedGeofence', {id: req.body.id});
+        next();
+      }
 
 };
 

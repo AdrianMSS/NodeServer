@@ -29,7 +29,6 @@ $('.mapboxgl-ctrl-group')
     '<span class="glyphicon glyphicon-floppy-disk"></span></button>');
 
 function saveGeofences() {
-    console.log(draw.getAll().features.length)
 
     if (draw.getAll().features.length == 0) {
         alert("Debe dibujar el poligono primero");
@@ -77,8 +76,6 @@ socket.on('updateGeofences', function (data) {
             gjPolygons.features.push(feature);
             map.getSource('scPolygons').setData(gjPolygons);
 
-            console.log('dem')
-            console.log(feature)
             //cargar las geofences en la tabla
             $('#table-geofences tbody').append(
                 '<tr id="tr'+feature.properties._id+'"><td><a href="#" onclick="findGeofence(this)" id="' + feature.properties._id + '">' +
@@ -91,19 +88,16 @@ socket.on('updateGeofences', function (data) {
 
 function findGeofence(geofence) {
 
-    console.log(geofence)
-
     var id = $(geofence).attr('id');
 
     gjPolygons.features.forEach(function (e) {
 
         if (id == e.properties._id) {
-            console.log(e.geometry.coordinates[0][0])
 
             map.flyTo({
 
                 center: e.geometry.coordinates[0][0],
-                zoom: 10,
+                zoom: 13,
                 bearing: 0,
                 speed: 2.5,
                 curve: 1,
@@ -138,7 +132,7 @@ function deleteGeofence(geofence) {
                         $('#tr'+id).remove()
                         return false;
                     }
-                });
+                });            
             }
         });
 
