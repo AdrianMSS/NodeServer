@@ -34,9 +34,12 @@ socket.on('updateShip', function (data) {
     var alertGeofence = data.alert; //Alerta de violacion de una geofence 
 
     //Verificar si viene una alerta de violacion de una geofence
-    if(alertGeofence){
-        $('#infoAlert').html('El dispositivo con el id: '+ shipFeature.properties.ID+ 
-                            ' se encuentra adentro de la geofence: '+ alertGeofence[0].description);
+    if (alertGeofence) {
+        $('#infoAlert').html('El dispositivo con el id: ' + shipFeature.properties.ID +
+            ' se encuentra adentro de la geofence: ' + alertGeofence[0].description);
+
+        $('#flyToAlert').attr({ 'lng': shipFeature.geometry.coordinates[0], 'lat': shipFeature.geometry.coordinates[1] });
+
         $('#modalAlert').modal('show');
     }
 
@@ -74,7 +77,7 @@ socket.on('updateGeofences', function (data) {
 socket.on('deletedGeofence', function (data) {
 
     console.log(data.id)
-    var id= data.id;
+    var id = data.id;
     gjPolygons.features.forEach(function (e, index) {
 
         if (id == e.properties._id) {
@@ -422,6 +425,23 @@ function drawCharts(point) {
 
 
 }
+
+//Mover la camara del mapa al punto donde se esta violando la geofence
+$('#flyToAlert').click(function () {
+
+    $('#modalAlert').modal('hide');
+    map.flyTo({
+        center: [$(this).attr('lng'), $(this).attr('lat')],
+        zoom: 16,
+        bearing: 0,
+        speed: 2.5,
+        curve: 1,
+
+        easing: function (t) {
+            return t;
+        }
+    });
+});
 
 //Overlay Navs
 $('#openNav').click(function () {
