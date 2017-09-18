@@ -28,30 +28,41 @@ socket.on('displayAllFeatures', function (data) {
 //UPDATE_SHIP
 socket.on('updateShip', function (data) {
 
+    console.log(data)
+
+    var shipFeature = data.gjNewPoint; //Nuevo punto a insertar
+    var alertGeofence = data.alert; //Alerta de violacion de una geofence 
+
+    //Verificar si viene una alerta de violacion de una geofence
+    if(alertGeofence){
+        $('#infoAlert').html('El dispositivo con el id: '+ shipFeature.properties.ID+ 
+                            ' se encuentra adentro de la geofence: '+ alertGeofence[0].description);
+        $('#modalAlert').modal('show');
+    }
+
     //Actualizar los puntos
-    gjPoints.features.push(data); //insertar el nuevo punto en el geojson de puntos
+    gjPoints.features.push(shipFeature); //insertar el nuevo punto en el geojson de puntos
     map.getSource('scPoints').setData(gjPoints); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar las lineas
-    var match = _.find(gjLines.features, function (geojson) { return geojson.properties._id == data.properties.ID });
+    var match = _.find(gjLines.features, function (geojson) { return geojson.properties._id == shipFeature.properties.ID });
     if (match) {
         var index = _.indexOf(gjLines.features, match);
-        gjLines.features[index].geometry.coordinates.push(data.geometry.coordinates);
+        gjLines.features[index].geometry.coordinates.push(shipFeature.geometry.coordinates);
     }
     map.getSource('scLines').setData(gjLines); //insertar el geojson de puntos actuializado al mapa
 
     //Actualizar los graficos
-    chart.series[0].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.vel)], true, false); //Speed
-    chart.series[1].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.RAM)], true, false); //RAM    
-    chart.series[2].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.RSSI)], true, false); //RSSI
-    chart.series[3].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.alt)], true, false); //Height
-    chart.series[4].addPoint([new Date(data.properties.dateRemora).getTime(), parseInt(data.properties.fuel)], true, false); //Fuel
+    chart.series[0].addPoint([new Date(shipFeature.properties.dateRemora).getTime(), parseInt(shipFeature.properties.vel)], true, false); //Speed
+    chart.series[1].addPoint([new Date(shipFeature.properties.dateRemora).getTime(), parseInt(shipFeature.properties.RAM)], true, false); //RAM    
+    chart.series[2].addPoint([new Date(shipFeature.properties.dateRemora).getTime(), parseInt(shipFeature.properties.RSSI)], true, false); //RSSI
+    chart.series[3].addPoint([new Date(shipFeature.properties.dateRemora).getTime(), parseInt(shipFeature.properties.alt)], true, false); //Height
+    chart.series[4].addPoint([new Date(shipFeature.properties.dateRemora).getTime(), parseInt(shipFeature.properties.fuel)], true, false); //Fuel
 });
 
 //UPDATE_GEOFENCING
 socket.on('updateGeofences', function (data) {
 
-    console.log('uppp')
     data.features.forEach(function (feature, index) {
 
         gjPolygons.features.push(feature);

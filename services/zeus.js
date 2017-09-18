@@ -28,10 +28,15 @@ Date.prototype.addHours = function (h) {
     return this;
 }
 
-
+//Retorna todos los puntos
 exports.getAllPoints = function () {
 
     return new Promise(function (resolve, reject) {
+
+        //Indexes geospatial
+        db.collection('Zeus').createIndex({ geo: "2dsphere" })
+        db.collection('geofence').createIndex({ geo: "2dsphere" })
+
         db.collection('Zeus').find({ geo: { $exists: true } }).sort({ dateRemora: 1 }).toArray(function (err, doc) {
 
             if (err) reject(err);
@@ -66,6 +71,7 @@ exports.getAllPoints = function () {
     });
 }
 
+//Retorna todas las lineas
 exports.getAllLines = function () {
 
     return new Promise(function (resolve, reject) {
@@ -86,6 +92,7 @@ exports.getAllLines = function () {
     });
 }
 
+//Retorna todos las geofences
 exports.getAllPolygons = function () {
 
     return new Promise((resolve, reject) => {
@@ -97,6 +104,7 @@ exports.getAllPolygons = function () {
     });
 }
 
+//Retorna los datos filtrados por fechas
 exports.getFilter = function (req, res) {
 
     var dInit = req.query.dateInit,
@@ -113,6 +121,7 @@ exports.getFilter = function (req, res) {
 
 }
 
+//Filtracion de los puntos
 var filterPoints = (dInit, dEnd) => {
 
     return new Promise(function (resolve, reject) {
@@ -155,6 +164,7 @@ var filterPoints = (dInit, dEnd) => {
     });
 }
 
+//Filtracion de las lineas
 var filterLines = (dInit, dEnd) => {
 
     return new Promise(function (resolve, reject) {
@@ -186,6 +196,7 @@ var filterLines = (dInit, dEnd) => {
     });
 }
 
+//Inserta una nueva geofence
 exports.insertNewPolygon = (data) => {
 
     return new Promise((resolve, reject) => {
@@ -212,6 +223,7 @@ exports.insertNewPolygon = (data) => {
     );
 }
 
+//Inserta un nuevo punto 
 exports.insertNewPoint = function (req, res) {
 
     var pos = req.body;
@@ -223,6 +235,7 @@ exports.insertNewPoint = function (req, res) {
     });
 }
 
+//Elimina una geofence
 exports.deleteGeofence = function (req, res) {
 
     console.log(req.body.id)
@@ -236,4 +249,25 @@ exports.deleteGeofence = function (req, res) {
             res.send(200, result);
         }
     });
+}
+
+//Comprueba si el nuevo punto a insertar se encuentro dentro de una geofence
+exports.checkGeofence = (geo) => {
+
+    return new Promise((resolve, reject) => {
+
+        db.collection('geofence').find({
+            geo:
+              { $nearSphere:
+                 {
+                   $geometry: geo,
+                  $maxDistance: 0
+                 }
+              }
+          }).toArray(function (err, doc) {
+
+            err ? reject(err) : resolve(doc)
+        });
+
+    })
 }

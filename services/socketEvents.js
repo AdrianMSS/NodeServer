@@ -75,8 +75,16 @@ module.exports = function (io) {
     delete point['lon'];
 
     var gjNewPoint = GeoJSON.parse(point, { GeoJSON: 'geo' });
-    sock.emit('updateShip', gjNewPoint);
 
+  //Verificacion si el punto se encuentra dentro de una geofence
+  zeus.checkGeofence(point['geo'])
+  .then(function (alert) {
+      
+    sock.emit('updateShip', (alert[0]==null) ? {gjNewPoint} : {gjNewPoint, alert} );
+  }, function (err) {
+    console.log(err);
+  });
+  
     next();
   }
 
@@ -85,6 +93,5 @@ module.exports = function (io) {
         sock.emit('deletedGeofence', {id: req.body.id});
         next();
       }
-
 };
 
