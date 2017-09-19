@@ -10,6 +10,8 @@ var map = new mapboxgl.Map({
     zoom: 7
 });
 
+var popup = new mapboxgl.Popup();
+
 //SocketIO
 var socket = io.connect(HOST);
 
@@ -28,6 +30,7 @@ $('.mapboxgl-ctrl-group')
     .append('<button id="saveGeofences" onclick= "saveGeofences()" class="mapbox-gl-draw_ctrl-draw-btn" title="Save Geofences">' +
     '<span class="glyphicon glyphicon-floppy-disk"></span></button>');
 
+//Envia las nuevas geofences al servidos para ser almacenadas    
 function saveGeofences() {
 
     if (draw.getAll().features.length == 0) {
@@ -36,6 +39,8 @@ function saveGeofences() {
 
         socket.emit('saveGeofences', draw.getAll());
         alert("Success");
+        draw.deleteAll().getAll();
+        popup.remove();
     }
 
 };
@@ -45,11 +50,11 @@ socket.on('sendGeofences', function (data) {
 
     gjPolygons = data;
     //Cargar el mapa con las geofences 
-    map.addSource('scPolygons', { type: 'geojson', data: gjPolygons });
+    map.addSource('scGeofence', { type: 'geojson', data: gjPolygons });
     map.addLayer({
-        'id': 'maine',
+        'id': 'layrGeofence',
         'type': 'fill',
-        'source': 'scPolygons',
+        'source': 'scGeofence',
         'layout': {},
         'paint': {
             'fill-color': '#088',
@@ -57,11 +62,31 @@ socket.on('sendGeofences', function (data) {
         }
     });
 
+
+    map.on('click', 'layrGeofence', function (e) {
+
+        console.log(e.features[0].properties.description)
+            popup
+            .setLngLat(e.lngLat)
+            .setHTML('<br><p>'+e.features[0].properties.description+'</p>'+
+            '<a style="margin: 0% 40%" onclick="deleteGeofence(this)" id="' + e.features[0].properties._id + '"><span class="glyphicon glyphicon-trash"></span></a>')
+            .addTo(map);
+    });
+
+    // Change the cursor to a pointer when the mouse is over the layrGeofence.
+    map.on('mouseenter', 'layrGeofence', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'layrGeofence', function () {
+        map.getCanvas().style.cursor = '';
+    });
     //Cargar la tabla con las geofences
     gjPolygons.features.forEach(function (e) {
 
         $('#table-geofences tbody').append(
-            '<tr id="tr'+e.properties._id+'"><td><a href="#" onclick="findGeofence(this)" id="' + e.properties._id + '">' +
+            '<tr id="tr' + e.properties._id + '"><td><a href="#" onclick="findGeofence(this)" id="' + e.properties._id + '">' +
             'Geofence</a></td><td><a onclick="deleteGeofence(this)" id="' + e.properties._id + '"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
         )
     });
@@ -71,18 +96,18 @@ socket.on('sendGeofences', function (data) {
 socket.on('updateGeofences', function (data) {
 
 
-        data.features.forEach(function (feature, index) {
-    
-            gjPolygons.features.push(feature);
-            map.getSource('scPolygons').setData(gjPolygons);
+    data.features.forEach(function (feature, index) {
 
-            //cargar las geofences en la tabla
-            $('#table-geofences tbody').append(
-                '<tr id="tr'+feature.properties._id+'"><td><a href="#" onclick="findGeofence(this)" id="' + feature.properties._id + '">' +
-                'Geofence</a></td><td><a onclick="deleteGeofence(this)" id="' + feature.properties._id + '"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
-            )
-        });
+        gjPolygons.features.push(feature);
+        map.getSource('scGeofence').setData(gjPolygons);
+
+        //cargar las geofences en la tabla
+        $('#table-geofences tbody').append(
+            '<tr id="tr' + feature.properties._id + '"><td><a href="#" onclick="findGeofence(this)" id="' + feature.properties._id + '">' +
+            'Geofence</a></td><td><a onclick="deleteGeofence(this)" id="' + feature.properties._id + '"><span class="glyphicon glyphicon-trash"></span></a></td></tr>'
+        )
     });
+});
 
 
 
@@ -128,11 +153,11 @@ function deleteGeofence(geofence) {
 
                     if (id == e.properties._id) {
                         gjPolygons.features.splice(index, 1);
-                        map.getSource('scPolygons').setData(gjPolygons);
-                        $('#tr'+id).remove()
+                        map.getSource('scGeofence').setData(gjPolygons);
+                        $('#tr' + id).remove()
                         return false;
                     }
-                });            
+                });
             }
         });
 
