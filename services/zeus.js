@@ -7,8 +7,9 @@ var turf = require('turf'); //Modulo para medir distancias a partir de coordenad
 var uristring =
     process.env.MONGOLAB_URI ||
     process.env.MONGOHQ_URL ||
-    'mongodb://localhost/Remora';
-//'mongodb://heroku_v37rd9bf:lsd8ccnsrsn5skoiv1rpncad77@ds011890.mlab.com:11890/heroku_v37rd9bf';
+    'mongodb://localhost/Remora',
+    //'mongodb://heroku_v37rd9bf:lsd8ccnsrsn5skoiv1rpncad77@ds011890.mlab.com:11890/heroku_v37rd9bf',
+    db;
 
 
 //Conexión con la base de datos
@@ -34,8 +35,8 @@ exports.getAllPoints = function () {
     return new Promise(function (resolve, reject) {
 
         //Indexes geospatial
-        db.collection('Zeus').createIndex({ geo: "2dsphere" })
-        db.collection('geofence').createIndex({ geo: "2dsphere" })
+        /* db.collection('Zeus').createIndex({ geo: "2dsphere" })
+        db.collection('geofence').createIndex({ geo: "2dsphere" }) */
 
         db.collection('Zeus').find({ geo: { $exists: true } }).sort({ dateRemora: 1 }).toArray(function (err, doc) {
 
@@ -258,13 +259,14 @@ exports.checkGeofence = (geo) => {
 
         db.collection('geofence').find({
             geo:
-              { $nearSphere:
-                 {
-                   $geometry: geo,
-                  $maxDistance: 0
-                 }
-              }
-          }).toArray(function (err, doc) {
+            {
+                $nearSphere:
+                {
+                    $geometry: geo,
+                    $maxDistance: 0
+                }
+            }
+        }).toArray(function (err, doc) {
 
             err ? reject(err) : resolve(doc)
         });
