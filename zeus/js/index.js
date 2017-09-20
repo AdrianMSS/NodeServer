@@ -244,11 +244,10 @@ function generateDataCharts(data) {
 
     _.map(data.gjPoints.features, function (e) {
         jsonDataCharts.arrSpeed.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.vel), id: e.properties._id });
-        //jsonDataCharts.arrSpeed.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.vel)]);
-        jsonDataCharts.arrFuel.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.fuel)]);
-        jsonDataCharts.arrAlt.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.alt)]);
-        jsonDataCharts.arrRAM.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.RAM)]);
-        jsonDataCharts.arrRSSI.push([new Date(e.properties.dateRemora).getTime(), parseInt(e.properties.RSSI)]);
+        jsonDataCharts.arrFuel.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.fuel), id: e.properties._id });
+        jsonDataCharts.arrAlt.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.alt), id: e.properties._id });
+        jsonDataCharts.arrRAM.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.RAM), id: e.properties._id });
+        jsonDataCharts.arrRSSI.push({ x: new Date(e.properties.dateRemora).getTime(), y: parseInt(e.properties.RSSI), id: e.properties._id });
 
     });
 
@@ -281,7 +280,7 @@ function drawCharts(point) {
                 count: 1,
                 text: 'All'
             }],
-            selected: 3,
+            selected: 1,
             inputEnabled: false
         },
 
