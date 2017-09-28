@@ -20,9 +20,34 @@
 
     <div class="content">
 
-        <!-- <div id="dash-left">
-            <button class="btn btn-default" id="openNav"><span class="glyphicon glyphicon-th-list"></span></button>
-        </div> -->
+        <div id="dash-left">
+            <!--<button class="btn btn-default" id="openNav"><span class="glyphicon glyphicon-th-list"></span></button>-->
+            <button class="btn btn-default" id="btnModalImportSHP"><span class="glyphicon glyphicon-import"></span></button>
+        </div>
+
+        <!-- Modal Import SHP file-->
+        <div class="modal fade" id="modalImportSHP" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Incluir geofences desde archivos SPH</h4>
+                    </div>
+                    <div class="modal-body">
+                        
+                    <input type="file" id="SHPFile" accept=".zip">
+
+                    </div>
+                    <div class="modal-footer" style="display: flex">
+                        <button type="button" class="btn btn-default" style="display: none;" id="importSHP">Importar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
     <div id="navGeofences" class="overlay-left">
@@ -49,21 +74,16 @@
     <script src="/socket.io/socket.io.js"></script>
     <!-- Lodash -->
     <script src="../zeus/bower_components/lodash/dist/lodash.min.js"></script>
+    <!-- SHP2Geojson -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js"></script>
+    <script src="../zeus/bower_components/shp2geojson/jszip.js"></script>
+    <script src="../zeus/bower_components/shp2geojson/jszip-utils.js"></script>
+    <!--[if IE]><script type="text/javascript" src="../zeus/bower_components/shp2geojson/jszip-utils-ie.js"></script><![endif]-->
+    <script src="../zeus/bower_components/shp2geojson/preprocess.js"></script>
+    <script src="../zeus/bower_components/shp2geojson/preview.js"></script>
     <!-- Geofences -->
     <script src="js/geofences.js"></script>
 
-    <script>
-        $('#openNav').click(function () {
-            $('#navGeofences').css('width', '30%');
-            $(this).hide();
-
-        });
-
-        $('#closeNav').click(function () {
-            $('#navGeofences').css('width', '0%');
-            $('#openNav').show();
-        });
-    </script>
 </body>
 
 </html>

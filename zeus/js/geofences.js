@@ -1,6 +1,6 @@
 var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
 //var HOST = 'http://localhost:3000';
-var gjPolygons;
+var gjPolygons, file, flag;
 //Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWR0aGVjbGFyayIsImEiOiJjaW93emVwanowMW5ldGhtNGI2N293eDY3In0.-hV-UWrYPEZWbILtCFFbOg';
 var map = new mapboxgl.Map({
@@ -161,5 +161,62 @@ function deleteGeofence(geofence) {
             }
         });
 
+    }
+}
+
+// Open/Close nav
+$('#openNav').click(function () {
+    $('#navGeofences').css('width', '30%');
+    $(this).hide();
+
+});
+
+$('#closeNav').click(function () {
+    $('#navGeofences').css('width', '0%');
+    $('#openNav').show();
+}); 
+
+//Open Modal to import SPH ZIP
+$('#btnModalImportSHP').click(function () {
+    
+    $('#modalImportSHP').modal('show');
+});
+
+$("#SHPFile").change(function(evt) {
+    file = evt.target.files[0];
+    if(file.size > 0) {
+        $('#importSHP').show();
+    }
+});
+
+$('#importSHP').click(function() {
+    flag=true;
+    loadShpZip();
+});
+
+function loadShpZip() {
+
+    if(file.name.split('.')[1] == 'zip') {
+
+        //Parse SHP to Geojson
+        loadshp({
+            url: file,
+            encoding: 'big5',
+            EPSG: 3826 
+        }, function(geojson) {
+
+            //Save geojson to the server
+            if (flag)
+            socket.emit('saveGeofences', geojson);
+            flag=false
+        });
+
+        //Reset Modal
+        $('#importSHP').hide();
+        $('#SHPFile').val("");
+        $('#modalImportSHP').modal('hide');
+        
+    } else {
+        alert('Se debe importar un archivo .zip');
     }
 }
