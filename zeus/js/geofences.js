@@ -1,5 +1,5 @@
-//var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
-var HOST = 'http://localhost:3000';
+var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
+//var HOST = 'http://localhost:3000';
 var gjPolygons, file, flag;
 //Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWR0aGVjbGFyayIsImEiOiJjaW93emVwanowMW5ldGhtNGI2N293eDY3In0.-hV-UWrYPEZWbILtCFFbOg';
