@@ -1,5 +1,5 @@
-var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
-//var HOST = 'http://localhost:3000';
+//var HOST = 'https://imaginexyz-genuinoday.herokuapp.com';
+var HOST = 'http://localhost:3000';
 var gjPolygons, file, flag;
 //Mapbox
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2aWR0aGVjbGFyayIsImEiOiJjaW93emVwanowMW5ldGhtNGI2N293eDY3In0.-hV-UWrYPEZWbILtCFFbOg';
@@ -26,9 +26,32 @@ var draw = new MapboxDraw({
 
 map.addControl(draw);
 
+//Estilos para el drawControl de mapbox personificado
 $('.mapboxgl-ctrl-group')
     .append('<button id="saveGeofences" onclick= "saveGeofences()" class="mapbox-gl-draw_ctrl-draw-btn" title="Save Geofences">' +
     '<span class="glyphicon glyphicon-floppy-disk"></span></button>');
+$('.mapboxgl-ctrl-top-right').hide();
+$('.mapboxgl-ctrl-top-right').prepend('<div class="content-draw-manual  mapboxgl-ctrl"> <button type="button" class="close">&times;</button> </div>')
+$('.mapboxgl-ctrl-top-right').css({
+    "background-color": "rgba(255, 255, 255, 0.2)",
+    "top": "95px",
+    "right": "10px",
+    "border-radius":"5px"
+});
+$('.mapboxgl-ctrl-top-right .mapboxgl-ctrl').css('margin' , '0px 20px 15px');
+$('.mapboxgl-ctrl-top-right .content-draw-manual').css('margin' , '5px 5px');
+
+// Abrir/Cerrar el drawControl
+$('#drawManual').click(function () {
+    var drawOpt = $('.mapboxgl-ctrl-top-right');
+    drawOpt.css('display') == 'none' ?  drawOpt.show('fast') : hideDrawManual();
+})
+$('.content-draw-manual .close').click(hideDrawManual)
+
+function hideDrawManual(){
+    $('.mapboxgl-ctrl-top-right').hide('fast')
+    draw.deleteAll().getAll();
+}
 
 //Envia las nuevas geofences al servidos para ser almacenadas    
 function saveGeofences() {
@@ -42,10 +65,8 @@ function saveGeofences() {
         draw.deleteAll().getAll();
         popup.remove();
     }
-
 };
 
-socket.emit('getGeofences');
 socket.on('sendGeofences', function (data) {
 
     gjPolygons = data;
@@ -66,9 +87,9 @@ socket.on('sendGeofences', function (data) {
     map.on('click', 'layrGeofence', function (e) {
 
         console.log(e.features[0].properties.description)
-            popup
+        popup
             .setLngLat(e.lngLat)
-            .setHTML('<br><p>'+e.features[0].properties.description+'</p>'+
+            .setHTML('<br><p>' + e.features[0].properties.description + '</p>' +
             '<a style="margin: 0% 40%" onclick="deleteGeofence(this)" id="' + e.features[0].properties._id + '"><span class="glyphicon glyphicon-trash"></span></a>')
             .addTo(map);
     });
@@ -174,48 +195,51 @@ $('#openNav').click(function () {
 $('#closeNav').click(function () {
     $('#navGeofences').css('width', '0%');
     $('#openNav').show();
-}); 
+});
 
 //Open Modal to import SPH ZIP
 $('#btnModalImportSHP').click(function () {
-    
+
+    //Cerrar las opciones de DrawManual en caso de estar abiertas
+    if($('.mapboxgl-ctrl-top-right').css('display') != 'none') hideDrawManual();
+    //Abrir el modal para importar SHP
     $('#modalImportSHP').modal('show');
 });
 
-$("#SHPFile").change(function(evt) {
+$("#SHPFile").change(function (evt) {
     file = evt.target.files[0];
-    if(file.size > 0) {
+    if (file.size > 0) {
         $('#importSHP').show();
     }
 });
 
-$('#importSHP').click(function() {
-    flag=true;
+$('#importSHP').click(function () {
+    flag = true;
     loadShpZip();
 });
 
 function loadShpZip() {
 
-    if(file.name.split('.')[1] == 'zip') {
+    if (file.name.split('.')[1] == 'zip') {
 
         //Parse SHP to Geojson
         loadshp({
             url: file,
             encoding: 'big5',
-            EPSG: 3826 
-        }, function(geojson) {
+            EPSG: 3826
+        }, function (geojson) {
 
             //Save geojson to the server
             if (flag)
-            socket.emit('saveGeofences', geojson);
-            flag=false
+                socket.emit('saveGeofences', geojson);
+            flag = false
         });
 
         //Reset Modal
         $('#importSHP').hide();
         $('#SHPFile').val("");
         $('#modalImportSHP').modal('hide');
-        
+
     } else {
         alert('Se debe importar un archivo .zip');
     }

@@ -470,7 +470,7 @@ $('#resetZoom').click(function () {
     map.flyTo({
 
         center: [-84.07836513337293, 9.933419690622571],
-        zoom: 8,
+        zoom: 7,
         bearing: 0,
         speed: 2.5,
         curve: 1,
@@ -492,4 +492,3 @@ $('#hideLines').click(function () {
         map.setLayoutProperty('layrLines', 'visibility', 'visible');
     }
 });
-

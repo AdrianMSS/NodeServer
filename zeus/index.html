@@ -17,18 +17,34 @@
 
     <div id='map'></div>
 
-    <div class="content">
+    <a href="javascript:void(0)" id="openMenu"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
 
-        <div id="dash-rigth">
-            <button class="btn btn-default" id="openNav"><span class="glyphicon glyphicon-stats"></span></button>
-            <button class="btn btn-default" id="resetZoom"><span class="glyphicon glyphicon-fullscreen"></span></button>
-            <button class="btn btn-default" id="hideLines"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
-            <a href="geofences.html" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-retweet"></span></a>
+    <div id="menu" class="sideMenu">
+        <a href="javascript:void(0)" class="closebtn" id="closeMenu">&times;</a>
+        <div class="sideMenuContent">
+            <a href="/zeus" class="selectedMenu">ZEUS</a>
+            <a href="geofences.html">GEOFENCES</a>
+            <a href="quadtree.html">SIMPLIFY</a>
         </div>
     </div>
 
-     <!-- Alert Modal -->
-     <div class="modal fade" id="modalAlert" role="dialog">
+    <div class="content">
+       
+        <div id="dash-rigth">
+            <button class="btn btn-default" id="openNav" title="Stats">
+                <span class="glyphicon glyphicon-stats"></span>
+            </button>
+            <button class="btn btn-default" id="hideLines" title="Draw Lines">
+                <span class="glyphicon glyphicon-resize-horizontal"></span>
+            </button>
+            <button class="btn btn-default" id="resetZoom" title="Zoom Out">
+                <span class="glyphicon glyphicon-fullscreen"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal fade" id="modalAlert" role="dialog">
         <div class="modal-dialog">
 
             <div class="modal-content">
@@ -40,7 +56,7 @@
                     <p id="infoAlert"></p>
                 </div>
                 <div class="modal-footer" style="display: flex">
-                        <button type="button" class="btn btn-default" id="flyToAlert">Ir a</button>
+                    <button type="button" class="btn btn-default" id="flyToAlert">Ir a</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -59,7 +75,7 @@
                         <div class='input-group date' id='datetimepickerInit'>
                             <input type='text' class="form-control" id="dateInit" />
                             <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                         <div class="help-block with-errors" id="errDateInit"></div>
@@ -70,7 +86,7 @@
                         <div class='input-group date' id='datetimepickerEnd'>
                             <input type='text' class="form-control" id="dateEnd" />
                             <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
@@ -104,6 +120,8 @@
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <!-- Index -->
     <script src="js/index.js"></script>
+    <!-- all -->
+    <script src="js/all.js"></script>
 </body>
 
 </html>

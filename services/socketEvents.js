@@ -11,10 +11,10 @@ module.exports = function (io) {
 
     //Recibe un nuevo poligino para almacenarlo
     socket.on('saveGeofences', function (data) {
-      
+
       zeus.insertNewPolygon(data)
         .then(function (result) {
-          
+
           var gjPolygons = GeoJSON.parse(result.ops, { GeoJSON: 'geo' });
           socket.emit('updateGeofences', gjPolygons);
           socket.broadcast.emit('updateGeofences', gjPolygons);
@@ -23,19 +23,49 @@ module.exports = function (io) {
         });
     });
 
-    //Envia las geofences existentes 
-    socket.on('getGeofences', function (data) {
+    //Recibe un poligino simplificado para almacenarlo
+    socket.on('saveSimplifyGeofence', function (data) {
 
-      zeus.getAllPolygons()
-        .then(function (geofences) {
-
-          var gjPolygons = GeoJSON.parse(geofences, { GeoJSON: 'geo' });
-          socket.emit('sendGeofences', gjPolygons);
+      zeus.insertSimplifyPolygon(data)
+        .then(function (result) {
+          console.log('result')
         }, function (err) {
           console.log(err);
         });
     });
+
+    //Envia las geofences existentes
+    getAllPolygons()
+
   });
+
+  function getAllPolygons() {
+    
+        zeus.getAllPolygons()
+          .then(function (geofences) {
+    
+            var gjPolygons = GeoJSON.parse(geofences, { GeoJSON: 'geo' });
+            sock.emit('sendGeofences', gjPolygons);
+    
+            //Envia las geofences simplificadas
+            getAllSimplifyPolygons();
+          }, function (err) {
+            console.log(err);
+          });
+      }
+
+  function getAllSimplifyPolygons() {
+
+    zeus.getAllSimplifyPolygons()
+      .then(function (geofences) {
+
+        var gjPolygons = GeoJSON.parse(geofences, { GeoJSON: 'simplify' });
+        sock.emit('sendSimplifyGeofences', gjPolygons);
+      }, function (err) {
+        console.log(err);
+      });
+  }
+
 
   //Funcion que envia todos los puntos y las lineas cuando un cliente ingresa por primera vez
   function getAllFeatures() {
@@ -76,22 +106,22 @@ module.exports = function (io) {
 
     var gjNewPoint = GeoJSON.parse(point, { GeoJSON: 'geo' });
 
-  //Verificacion si el punto se encuentra dentro de una geofence
-  zeus.checkGeofence(point['geo'])
-  .then(function (alert) {
-      
-    sock.emit('updateShip', (alert[0]==null) ? {gjNewPoint} : {gjNewPoint, alert} );
-  }, function (err) {
-    console.log(err);
-  });
-  
+    //Verificacion si el punto se encuentra dentro de una geofence
+    zeus.checkGeofence(point['geo'])
+      .then(function (alert) {
+
+        sock.emit('updateShip', (alert[0] == null) ? { gjNewPoint } : { gjNewPoint, alert });
+      }, function (err) {
+        console.log(err);
+      });
+
     next();
   }
 
   module.exports.deleteGeofence = function (req, res, next) {
 
-        sock.emit('deletedGeofence', {id: req.body.id});
-        next();
-      }
+    sock.emit('deletedGeofence', { id: req.body.id });
+    next();
+  }
 };
 

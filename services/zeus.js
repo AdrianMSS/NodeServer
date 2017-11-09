@@ -98,12 +98,26 @@ exports.getAllPolygons = function () {
 
     return new Promise((resolve, reject) => {
 
-        db.collection('geofence').find({ geo: { $exists: true } }).toArray(function (err, doc) {
+        db.collection('geofence').find({ geo: { $exists: true } },{simplify:0}).toArray(function (err, doc) {
 
             err ? reject(err) : resolve(doc)
         });
     });
 }
+
+//Retorna todas las geofences simplificadas
+exports.getAllSimplifyPolygons = function () {
+    
+        return new Promise((resolve, reject) => {
+    
+            db.collection('geofence').find({ simplify: { $exists: true } },{geo:0}).toArray(function (err, doc) {
+                console.log('doc')
+                console.log(doc)
+
+                err ? reject(err) : resolve(doc)
+            });
+        });
+    }
 
 //Retorna los datos filtrados por fechas
 exports.getFilter = function (req, res) {
@@ -220,6 +234,30 @@ exports.insertNewPolygon = (data) => {
             }
             else resolve(doc)
         });
+    }
+    );
+}
+
+//Inserta la geofence simplificada
+exports.insertSimplifyPolygon = (data) => {
+
+    return new Promise((resolve, reject) => {
+
+        let _id = new mongo.ObjectID(data.properties._id),
+            simplify = data.geometry
+
+        db.collection('geofence').findAndModify(
+            { _id: _id },
+            [],
+            { $set: { simplify } },
+            { new: true },
+            function (err, doc) {
+                if (err) {
+                    throw err;
+                    reject(Error("Err to save"))
+                }
+                else resolve(doc)
+            });
     }
     );
 }
